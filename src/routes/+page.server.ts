@@ -3,7 +3,9 @@ import path from 'path';
 import fs from 'fs';
 import { type Directory } from '$lib/types';
 
-export function GET() {
+
+
+export function load({ params }) {
 	const DIR_PATH = 'videos/';
 
 	const rootPath = path.join(process.cwd(), 'static/' + DIR_PATH);
@@ -13,6 +15,5 @@ export function GET() {
 		name: 'videos',
 		videos: files.map((file) => ({ name: file, path: DIR_PATH + file }))
 	};
-
-	return json(directory);
-}
+	return directory;
+};

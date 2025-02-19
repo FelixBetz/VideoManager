@@ -1,18 +1,21 @@
 <script lang="ts">
 	import { type Directory } from '$lib/types';
-
 	import VideoPlayer from './VideoPlayer.svelte';
 	let { data = null }: { data: Directory | null } = $props();
 </script>
 
-<h1>sdfadfs</h1>
 {#if data}
-	<div class="video-gallery">
+	<div
+		class="video-gallery grid grid-cols-1 gap-6 p-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+	>
 		{#each data.videos as video}
-			<div>
-				<h2>{video.name}</h2>
-				<h2>{video.path}</h2>
-				<VideoPlayer videoSrc={video.path} />
+			<div class="video-card overflow-hidden rounded-lg bg-white shadow-md">
+				<div class="video-header bg-gray-800 p-4 text-white">
+					<h2 class="text-lg font-semibold">{video.name}</h2>
+				</div>
+				<div class="video-body">
+					<VideoPlayer videoSrc={video.path} />
+				</div>
 			</div>
 		{/each}
 	</div>
@@ -20,8 +23,6 @@
 
 <style>
 	.video-gallery {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 16px;
+		/* Tailwind CSS classes handle the styling */
 	}
 </style>
