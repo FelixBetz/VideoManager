@@ -38,6 +38,14 @@
 		previewCanvas.style.display = 'block';
 	}
 
+	function handleKeyDown(event: KeyboardEvent) {
+		if (event.key === 'f' || event.key === 'F') {
+			if (videoElement.requestFullscreen) {
+				videoElement.requestFullscreen();
+			}
+		}
+	}
+
 	$: if (previewCanvas) {
 		previewContext = previewCanvas.getContext('2d');
 	}
@@ -52,6 +60,7 @@
 		on:mousemove={handleMouseMove}
 		on:mouseleave={handleMouseLeave}
 		on:mouseenter={handleMouseEnter}
+		on:keydown={handleKeyDown}
 	>
 		<source src={videoSrc} type="video/mp4" />
 		<track kind="captions" src="captions.vtt" srclang="en" label="English" />
