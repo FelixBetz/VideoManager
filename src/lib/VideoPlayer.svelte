@@ -54,7 +54,7 @@
 		on:mouseenter={handleMouseEnter}
 	>
 		<source src={videoSrc} type="video/mp4" />
-		<track kind="captions" src="captions.vtt" srclang="en" label="English">
+		<track kind="captions" src="captions.vtt" srclang="en" label="English" />
 		Your browser does not support the video tag.
 	</video>
 	<div class="progress">
@@ -62,7 +62,7 @@
 	</div>
 	<video bind:this={offscreenVideoElement} style="display: none;">
 		<source src={videoSrc} type="video/mp4" />
-		<track kind="captions" src="captions.vtt" srclang="en" label="English">
+		<track kind="captions" src="captions.vtt" srclang="en" label="English" />
 	</video>
 </div>
 
