@@ -12,11 +12,7 @@ export async function load({ locals }) {
 			resolve(rows);
 		});
 	});
-	const videosFromDb: Video[] = await loadDataPromise;
-	const videos = videosFromDb.map((video) => ({
-		...video,
-		videoPath: `/videos/${video.videoPath}`
-	}));
+	const videos: Video[] = await loadDataPromise;
 
 	return { videos };
 }

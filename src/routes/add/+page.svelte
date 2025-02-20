@@ -4,9 +4,7 @@
 
 	function resetFields() {
 		video.title = 'test_video.mp4';
-		video.videoPath = 'test_video.mp4';
-		video.thumbnailPath =
-			'https://fastly.picsum.photos/id/417/1280/720.jpg?hmac=KP-fN2UIbyTCrkYJm9Rrvauae7hUfY4u-QWR6dFIaGQ';
+
 		video.orginalTitle = 'dummy';
 		video.orginalUrl = 'dummy';
 		video.directory = 'dummy';
@@ -22,6 +20,15 @@
 		directory: ''
 	});
 
+	let videoFile: File | null = null;
+
+	function handleFileChange(event: Event) {
+		const input = event.target as HTMLInputElement;
+		if (input.files && input.files.length > 0) {
+			videoFile = input.files[0];
+		}
+	}
+
 	onMount(() => {
 		resetFields();
 	});
@@ -29,7 +36,7 @@
 
 <h1 class="mb-4 text-2xl font-bold">Add Video</h1>
 
-<form class="space-y-4" method="POST">
+<form class="space-y-4" method="POST" enctype="multipart/form-data">
 	<div>
 		<label for="title" class="block text-sm font-medium text-gray-700">Title:</label>
 		<input
@@ -41,30 +48,7 @@
 			class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
 		/>
 	</div>
-	<div>
-		<label for="videoPath" class="block text-sm font-medium text-gray-700">Video Path:</label>
-		<input
-			type="text"
-			id="videoPath"
-			name="videoPath"
-			bind:value={video.videoPath}
-			required
-			class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-		/>
-	</div>
-	<div>
-		<label for="thumbnailPath" class="block text-sm font-medium text-gray-700"
-			>Thumbnail Path:</label
-		>
-		<input
-			type="text"
-			id="thumbnailPath"
-			name="thumbnailPath"
-			bind:value={video.thumbnailPath}
-			required
-			class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-		/>
-	</div>
+
 	<div>
 		<label for="orginalTitle" class="block text-sm font-medium text-gray-700">Original Title:</label
 		>
@@ -95,6 +79,19 @@
 			id="directory"
 			name="directory"
 			bind:value={video.directory}
+			required
+			class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+		/>
+	</div>
+	<div>
+		<label for="videoFile" class="block text-sm font-medium text-gray-700">Upload Video File:</label
+		>
+		<input
+			type="file"
+			id="videoFile"
+			name="videoFile"
+			accept="video/*"
+			onchange={handleFileChange}
 			required
 			class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
 		/>

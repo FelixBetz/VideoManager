@@ -15,11 +15,7 @@ export async function load({ params, locals }) {
 		});
 	});
 
-	const videoFromDb: Video = await loadVideoPromise;
-	const video = {
-		...videoFromDb,
-		videoPath: `/videos/${videoFromDb.videoPath}`
-	};
+	const video: Video = await loadVideoPromise;
 
 	return video;
 }
