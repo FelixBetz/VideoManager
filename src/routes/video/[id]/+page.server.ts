@@ -1,13 +1,24 @@
 import { type Video } from '$lib/types';
 
-export function load({ params }) {
-	const video: Video = {
-		title: 'test',
-		videoPath: '/videos/test_video.mp4',
-		orginalTitle: 'orgTitle',
-		orginalUrl: 'orgUrl',
-		thumbnailPath: '',
-		directory: ''
+export async function load({ params, locals }) {
+	const id: number = parseInt(params.id, 10);
+	const db = locals.db;
+
+	const loadVideoPromise = new Promise<Video>((resolve, reject) => {
+		const query = 'SELECT * FROM videos WHERE id = ?';
+		db.get<Video>(query, [id], (err: Error | null, row: Video) => {
+			if (err) {
+				reject(err);
+				return;
+			}
+			resolve(row);
+		});
+	});
+
+	const videoFromDb: Video = await loadVideoPromise;
+	const video = {
+		...videoFromDb,
+		videoPath: `/videos/${videoFromDb.videoPath}`
 	};
 
 	return video;
