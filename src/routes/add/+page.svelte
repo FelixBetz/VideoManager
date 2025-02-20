@@ -93,7 +93,7 @@
 			accept="video/*"
 			onchange={handleFileChange}
 			required
-			class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+			class="mt-1 block h-32 w-full rounded-md border-4 border-dotted border-gray-300 shadow-sm focus:ring-indigo-500 sm:text-sm"
 		/>
 	</div>
 	<button
