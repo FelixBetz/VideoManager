@@ -11,18 +11,12 @@
 		{#each data.videos as video}
 			<div class="video-card overflow-hidden rounded-lg bg-white shadow-md">
 				<div class="video-header bg-gray-800 p-4 text-white">
-					<h2 class="text-lg font-semibold">{video.name}</h2>
+					<h2 class="text-lg font-semibold">{video.title}</h2>
 				</div>
 				<div class="video-body">
-					<VideoPlayer videoSrc={video.path} />
+					<VideoPlayer src={video.path} />
 				</div>
 			</div>
 		{/each}
 	</div>
 {/if}
-
-<style>
-	.video-gallery {
-		/* Tailwind CSS classes handle the styling */
-	}
-</style>

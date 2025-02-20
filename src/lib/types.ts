@@ -4,6 +4,6 @@ export interface Directory {
 }
 
 export interface Video {
-	name: string;
+	title: string;
 	path: string;
 }

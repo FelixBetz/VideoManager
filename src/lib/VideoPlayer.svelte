@@ -1,5 +1,5 @@
 <script lang="ts">
-	export let videoSrc = '/videos/test_video.mp4';
+	export let src = '';
 	let videoElement: HTMLVideoElement;
 	let previewCanvas: HTMLCanvasElement;
 	let previewContext: CanvasRenderingContext2D | null = null;
@@ -51,29 +51,32 @@
 	}
 </script>
 
-<div class="video-container">
-	<video
-		bind:this={videoElement}
-		width="640"
-		height="480"
-		controls
-		on:mousemove={handleMouseMove}
-		on:mouseleave={handleMouseLeave}
-		on:mouseenter={handleMouseEnter}
-		on:keydown={handleKeyDown}
-	>
-		<source src={videoSrc} type="video/mp4" />
-		<track kind="captions" src="captions.vtt" srclang="en" label="English" />
-		Your browser does not support the video tag.
-	</video>
-	<div class="progress">
-		<canvas class="preview" bind:this={previewCanvas} width="160" height="90"></canvas>
+<h1>{src}</h1>
+{#if src != ''}
+	<div class="video-container">
+		<video
+			bind:this={videoElement}
+			width="640"
+			height="480"
+			controls
+			on:mousemove={handleMouseMove}
+			on:mouseleave={handleMouseLeave}
+			on:mouseenter={handleMouseEnter}
+			on:keydown={handleKeyDown}
+		>
+			<source {src} type="video/mp4" />
+			<track kind="captions" src="captions.vtt" srclang="en" label="English" />
+			Your browser does not support the video tag.
+		</video>
+		<div class="progress">
+			<canvas class="preview" bind:this={previewCanvas} width="160" height="90"></canvas>
+		</div>
+		<video bind:this={offscreenVideoElement} style="display: none;">
+			<source {src} type="video/mp4" />
+			<track kind="captions" src="captions.vtt" srclang="en" label="English" />
+		</video>
 	</div>
-	<video bind:this={offscreenVideoElement} style="display: none;">
-		<source src={videoSrc} type="video/mp4" />
-		<track kind="captions" src="captions.vtt" srclang="en" label="English" />
-	</video>
-</div>
+{/if}
 
 <style>
 	.preview {
