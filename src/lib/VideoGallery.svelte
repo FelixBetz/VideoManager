@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { type Video } from '$lib/types';
-	import VideoPlayer from './VideoPlayer.svelte';
+
 	let { videos = [] }: { videos: Video[] } = $props();
 </script>
 

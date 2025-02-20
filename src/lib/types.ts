@@ -1,4 +1,5 @@
 export interface Video {
+	id: number;
 	title: string;
 	videoPath: string;
 	thumbnailPath: string;

@@ -22,25 +22,20 @@
 		directory: ''
 	});
 
-	function addVideo() {
-		resetFields;
-	}
-
 	onMount(() => {
 		resetFields();
 	});
 </script>
 
-<pre>{JSON.stringify(video, null, 2)}</pre>
-
 <h1 class="mb-4 text-2xl font-bold">Add Video</h1>
 
-<form on:submit|preventDefault={addVideo} class="space-y-4">
+<form class="space-y-4" method="POST">
 	<div>
 		<label for="title" class="block text-sm font-medium text-gray-700">Title:</label>
 		<input
 			type="text"
 			id="title"
+			name="title"
 			bind:value={video.title}
 			required
 			class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
@@ -51,6 +46,7 @@
 		<input
 			type="text"
 			id="videoPath"
+			name="videoPath"
 			bind:value={video.videoPath}
 			required
 			class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
@@ -63,6 +59,7 @@
 		<input
 			type="text"
 			id="thumbnailPath"
+			name="thumbnailPath"
 			bind:value={video.thumbnailPath}
 			required
 			class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
@@ -74,6 +71,7 @@
 		<input
 			type="text"
 			id="orginalTitle"
+			name="orginalTitle"
 			bind:value={video.orginalTitle}
 			required
 			class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
@@ -84,6 +82,7 @@
 		<input
 			type="text"
 			id="orginalUrl"
+			name="orginalUrl"
 			bind:value={video.orginalUrl}
 			required
 			class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
@@ -94,6 +93,7 @@
 		<input
 			type="text"
 			id="directory"
+			name="directory"
 			bind:value={video.directory}
 			required
 			class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
@@ -102,6 +102,7 @@
 	<button
 		type="submit"
 		class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none"
-		>Add Video</button
 	>
+		Add Video
+	</button>
 </form>
