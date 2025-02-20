@@ -1,8 +1,14 @@
 import { type Video } from '$lib/types';
 
 export function load({ params }) {
-	console.log(params);
-	const video: Video = { title: 'test', path: '/videos/test_video.mp4' };
+	const video: Video = {
+		title: 'test',
+		videoPath: '/videos/test_video.mp4',
+		orginalTitle: 'orgTitle',
+		orginalUrl: 'orgUrl',
+		thumbnailPath: '',
+		directory: ''
+	};
 
 	return video;
 }

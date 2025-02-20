@@ -1,9 +1,9 @@
-export interface Directory {
-	name: string;
-	videos: Video[];
-}
-
 export interface Video {
 	title: string;
-	path: string;
+	videoPath: string;
+	thumbnailPath: string;
+
+	orginalTitle: string;
+	orginalUrl: string;
+	directory: string;
 }

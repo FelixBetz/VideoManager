@@ -1,16 +1,22 @@
-import path from 'path';
-import fs from 'fs';
-import { type Directory } from '$lib/types';
+import { type Video } from '$lib/types';
 
-export function load({ params }) {
-	const DIR_PATH = '/videos/';
+export async function load({ locals }) {
+	const loadDataPromise = new Promise<Video[]>((resolve, reject) => {
+		const db = locals.db;
+		const query = 'SELECT * FROM videos';
+		db.all<Video>(query, (err: Error | null, rows: Video[]) => {
+			if (err) {
+				reject(err);
+				return;
+			}
+			resolve(rows);
+		});
+	});
+	const videosFromDb: Video[] = await loadDataPromise;
+	const videos = videosFromDb.map((video) => ({
+		...video,
+		videoPath: `/videos/${video.videoPath}`
+	}));
 
-	const rootPath = path.join(process.cwd(), 'static/' + DIR_PATH);
-
-	const files = fs.readdirSync(rootPath);
-	const directory: Directory = {
-		name: 'videos',
-		videos: files.map((file) => ({ title: file, path: DIR_PATH + file }))
-	};
-	return directory;
+	return { videos };
 }

@@ -4,4 +4,4 @@
 	let { data } = $props();
 </script>
 
-<VideoGallery {data} />
+<VideoGallery videos={data.videos} />

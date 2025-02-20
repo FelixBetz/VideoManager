@@ -5,4 +5,4 @@
 	let { data }: PageProps = $props();
 </script>
 
-<VideoPlayer src={data.path} />
+<VideoPlayer src={data.videoPath} />
