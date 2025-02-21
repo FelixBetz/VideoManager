@@ -14,20 +14,12 @@
 		id: -1,
 		title: '',
 		videoPath: '',
-		thumbnailPath: '',
+		thumbnailImg: '',
+		thumbnailGif: '',
 		orginalTitle: '',
 		orginalUrl: '',
 		directory: ''
 	});
-
-	let videoFile: File | null = null;
-
-	function handleFileChange(event: Event) {
-		const input = event.target as HTMLInputElement;
-		if (input.files && input.files.length > 0) {
-			videoFile = input.files[0];
-		}
-	}
 
 	onMount(() => {
 		resetFields();
@@ -91,7 +83,6 @@
 			id="videoFile"
 			name="videoFile"
 			accept="video/*"
-			onchange={handleFileChange}
 			required
 			class="mt-1 block h-32 w-full rounded-md border-4 border-dotted border-gray-300 shadow-sm focus:ring-indigo-500 sm:text-sm"
 		/>

@@ -19,7 +19,8 @@ export const handle: Handle = async ({ event, resolve }) => {
 				id INTEGER PRIMARY KEY AUTOINCREMENT,
 				title TEXT,
 				videoPath TEXT,
-				thumbnailPath TEXT,
+				thumbnailImg TEXT,
+				thumbnailGif TEXT,
 				orginalTitle TEXT,
 				orginalUrl TEXT,
 				directory TEXT

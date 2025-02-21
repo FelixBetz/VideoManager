@@ -13,8 +13,24 @@
 				</h2>
 			</div>
 			<div class="video-body">
-				<img src={video.thumbnailPath} alt="{video.title} thumbnail" class="h-auto w-full" />
+				<img src={video.thumbnailImg} alt="{video.title} thumbnail" class="static h-auto w-full" />
+				<img src={video.thumbnailGif} alt="{video.title} gif" class="gif h-auto w-full" />
 			</div>
 		</div>
 	{/each}
 </div>
+
+<style>
+	.video-body img {
+		display: block;
+	}
+	.video-body img.gif {
+		display: none;
+	}
+	.video-card:hover .video-body img.static {
+		display: none;
+	}
+	.video-card:hover .video-body img.gif {
+		display: block;
+	}
+</style>
