@@ -10,11 +10,11 @@
 	}
 </script>
 
-<div class="video-gallery grid grid-cols-1 gap-6 p-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+<div class="video-gallery grid grid-cols-1 gap-6 p-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-8">
 	{#each videos as video}
 		<div class="video-card overflow-hidden rounded-lg bg-white shadow-md">
-			<div class="video-header bg-gray-800 p-4 text-white">
-				<h2 class="text-lg font-semibold">
+			<div class="video-header bg-gray-800 p-1 ps-3 text-white">
+				<h2 class="text-base font-semibold">
 					<a href={`/video/${video.id}`} target="_blank" rel="noopener noreferrer">{video.title}</a>
 				</h2>
 			</div>
