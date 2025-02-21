@@ -8,4 +8,7 @@ export interface Video {
 	orginalTitle: string;
 	orginalUrl: string;
 	directory: string;
+
+	durationSec: number;
+	tags: string[];
 }

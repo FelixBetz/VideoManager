@@ -25,7 +25,9 @@ export const actions = {
 			thumbnailGif: '',
 			orginalTitle: (data.get('orginalTitle') as string) || '',
 			orginalUrl: (data.get('orginalUrl') as string) || '',
-			directory: (data.get('directory') as string) || ''
+			directory: (data.get('directory') as string) || '',
+			durationSec: 0,
+			tags: ['Felix', 'hallo', 'qfsdf']
 		};
 
 		if (videoFile) {
@@ -75,6 +77,8 @@ export const actions = {
 					.run();
 			});
 
+			video.durationSec = Math.floor(duration);
+
 			video.videoPath = '/videos/' + videoFile.name;
 			video.thumbnailImg = '/thumbnails/' + thumbnailName;
 			video.thumbnailGif = '/thumbnails/' + gifName;
@@ -84,8 +88,8 @@ export const actions = {
 
 		const insertVideoPromise = new Promise<void>((resolve, reject) => {
 			const query = `
-            INSERT INTO videos (title, videoPath, thumbnailImg, thumbnailGif, orginalTitle, orginalUrl, directory)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO videos (title, videoPath, thumbnailImg, thumbnailGif, orginalTitle, orginalUrl, directory, durationSec, tags)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
             `;
 			db.run(
 				query,
@@ -96,7 +100,9 @@ export const actions = {
 					video.thumbnailGif,
 					video.orginalTitle,
 					video.orginalUrl,
-					video.directory
+					video.directory,
+					video.durationSec,
+					video.tags.join(',')
 				],
 				(err: Error | null) => {
 					if (err) {

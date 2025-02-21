@@ -13,6 +13,5 @@ export async function load({ locals }) {
 		});
 	});
 	const videos: Video[] = await loadDataPromise;
-
 	return { videos };
 }

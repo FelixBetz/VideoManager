@@ -18,7 +18,9 @@
 		thumbnailGif: '',
 		orginalTitle: '',
 		orginalUrl: '',
-		directory: ''
+		directory: '',
+		durationSec: 0,
+		tags: []
 	});
 
 	onMount(() => {

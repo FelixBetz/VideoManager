@@ -23,7 +23,9 @@ export const handle: Handle = async ({ event, resolve }) => {
 				thumbnailGif TEXT,
 				orginalTitle TEXT,
 				orginalUrl TEXT,
-				directory TEXT
+				directory TEXT,
+				durationSec INTEGER,
+				tags TEXT
 			)`;
 		db.run(videoQuery, (err) => {
 			if (err) {
