@@ -24,20 +24,28 @@
 	}
 </script>
 
-<div class="container mx-auto flex">
+<div class=" flex">
 	<!-- Directory Tree -->
-	<div class="directory-tree w-1/4 rounded-lg bg-gray-100 p-4 shadow-md">
+	<div class="directory-tree w-200px rounded-lg bg-gray-100 p-4 shadow-md">
 		<DirTree {getDirectory} directory={rootDirectory} />
 	</div>
 
 	<!-- Video Gallery -->
-	<div class="video-gallery-container w-3/4 p-4">
+	<div class="video-gallery-container flex-1 p-4">
 		{#if currentDir}
+			<h1 class="mb-4 text-xl font-bold">
+				{currentDir.name} <span class="text-sm italic">({currentDir.videos.length} Videos)</span>
+			</h1>
+			{#if currentDir.videos.length === 0}
+				<h1 class="text-sm italic">No videos</h1>
+			{/if}
+
 			<div
-				class="video-gallery grid grid-cols-1 gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4"
+				class="video-gallery grid gap-3"
+				style="grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));"
 			>
 				{#each currentDir.videos as video}
-					<div>
+					<div class="video-card-container">
 						<div class="video-card overflow-hidden rounded-lg bg-white shadow-md">
 							<div class="video-body relative">
 								<img
@@ -53,8 +61,8 @@
 								</div>
 							</div>
 						</div>
-						<div class="mt-2">
-							<p class="text-base font-semibold">
+						<div class="mt-0">
+							<p class="text-base text-sm font-semibold">
 								<a href={`/video/${video.id}`} target="_blank" rel="noopener noreferrer"
 									>{video.title}</a
 								>
@@ -79,5 +87,11 @@
 	}
 	.video-card:hover .video-body img.gif {
 		display: block;
+	}
+	.directory-tree {
+		width: 200px;
+	}
+	.video-card-container {
+		width: 200px;
 	}
 </style>
