@@ -47,7 +47,7 @@
 
 <div class=" flex">
 	<!-- Directory Tree -->
-	<div class="directory-tree w-200px rounded-lg bg-gray-100 p-4 shadow-md">
+	<div class="directory-tree w-200px overflow-y-auto rounded-lg bg-gray-100 p-4 shadow-md">
 		<DirTree {getDirectory} directory={rootDirectory} />
 		<div class="mt-2 flex items-center">
 			<input
@@ -67,7 +67,7 @@
 	</div>
 
 	<!-- Video Gallery -->
-	<div class="video-gallery-container flex-1 p-4">
+	<div class="video-gallery-container flex-1 overflow-y-auto p-4">
 		{#if currentDir}
 			<div class="mb-4 flex items-center justify-between">
 				<h1 class="text-xl font-bold">
@@ -147,6 +147,7 @@
 	}
 	.directory-tree {
 		width: 200px;
+		max-height: 100vh;
 	}
 	.video-card-container {
 		width: 200px;
@@ -158,5 +159,8 @@
 	.video-list-item {
 		padding: 8px;
 		border-bottom: 1px solid #ddd;
+	}
+	.video-gallery-container {
+		max-height: 100vh;
 	}
 </style>
