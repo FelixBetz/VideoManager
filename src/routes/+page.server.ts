@@ -37,7 +37,6 @@ export async function load({ locals }) {
 	const rootDirectory: Directory = {
 		id: 0,
 		name: 'root',
-		thumbnailPath: '',
 		parentDirectory: null,
 		subDirectories: [],
 		videos: []

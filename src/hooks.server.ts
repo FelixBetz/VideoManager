@@ -24,8 +24,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 				orginalTitle TEXT,
 				orginalUrl TEXT,
 				directory INTEGER,
-				durationSec INTEGER,
-				tags TEXT
+				durationSec INTEGER
 			)`;
 		db.run(videoQuery, (err) => {
 			if (err) {
@@ -38,7 +37,6 @@ export const handle: Handle = async ({ event, resolve }) => {
 			CREATE TABLE IF NOT EXISTS directories (
 				id INTEGER PRIMARY KEY AUTOINCREMENT,
 				name TEXT,
-				thumbnailPath TEXT,
 				parentDirectory INTEGER,
 				FOREIGN KEY (parentDirectory) REFERENCES directories(id)
 			)`;

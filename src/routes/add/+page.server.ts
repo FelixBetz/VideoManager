@@ -26,8 +26,7 @@ export const actions = {
 			orginalTitle: (data.get('orginalTitle') as string) || '',
 			orginalUrl: (data.get('orginalUrl') as string) || '',
 			directory: null,
-			durationSec: 0,
-			tags: ['Felix', 'hallo', 'qfsdf']
+			durationSec: 0
 		};
 
 		if (videoFile) {
@@ -45,7 +44,7 @@ export const actions = {
 						timestamps: ['00:00:01'], // Capture at 1 second
 						filename: thumbnailName,
 						folder: thumbnailsDir,
-						size: '1280x720'
+						size: '320x180'
 					})
 					.on('end', resolve)
 					.on('error', reject);
@@ -65,7 +64,7 @@ export const actions = {
 					.output(path.join(gifDir, gifName))
 					.outputOptions([
 						'-vf',
-						`${selectFilter},scale=1280:-1:flags=lanczos,setpts=15*PTS`, // Set playback speed to 2x
+						`${selectFilter},scale=320:-1:flags=lanczos,setpts=15*PTS`, // Set playback speed to 2x
 						'-vsync',
 						'vfr', // Ensures only the selected frames appear
 						'-loop',
@@ -88,8 +87,8 @@ export const actions = {
 
 		const insertVideoPromise = new Promise<void>((resolve, reject) => {
 			const query = `
-            INSERT INTO videos (title, videoPath, thumbnailImg, thumbnailGif, orginalTitle, orginalUrl, directory, durationSec, tags)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO videos (title, videoPath, thumbnailImg, thumbnailGif, orginalTitle, orginalUrl, directory, durationSec)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             `;
 			db.run(
 				query,
@@ -101,8 +100,7 @@ export const actions = {
 					video.orginalTitle,
 					video.orginalUrl,
 					video.directory,
-					video.durationSec,
-					video.tags.join(',')
+					video.durationSec
 				],
 				(err: Error | null) => {
 					if (err) {
