@@ -76,28 +76,28 @@
 			>
 				{#each currentDir.videos as video}
 					<div class="video-card-container">
-						<div class="video-card overflow-hidden rounded-lg bg-white shadow-md">
-							<div class="video-body relative">
-								<img
-									src={video.thumbnailImg}
-									alt="{video.title} thumbnail"
-									class="static h-auto w-full"
-								/>
-								<img src={video.thumbnailGif} alt="{video.title} gif" class="gif h-auto w-full" />
-								<div
-									class="video-duration bg-opacity-75 absolute right-2 bottom-2 rounded bg-black px-2 py-1 text-xs text-white"
-								>
-									{formatDuration(video.durationSec)}
+						<a href={`/video/${video.id}`} target="_blank" rel="noopener noreferrer">
+							<div class="video-card overflow-hidden rounded-lg bg-white shadow-md">
+								<div class="video-body relative">
+									<img
+										src={video.thumbnailImg}
+										alt="{video.title} thumbnail"
+										class="static h-auto w-full"
+									/>
+									<img src={video.thumbnailGif} alt="{video.title} gif" class="gif h-auto w-full" />
+									<div
+										class="video-duration bg-opacity-75 absolute right-2 bottom-2 rounded bg-black px-2 py-1 text-xs text-white"
+									>
+										{formatDuration(video.durationSec)}
+									</div>
 								</div>
 							</div>
-						</div>
-						<div class="mt-0">
-							<p class="text-base text-sm font-semibold">
-								<a href={`/video/${video.id}`} target="_blank" rel="noopener noreferrer"
-									>{video.title}</a
-								>
-							</p>
-						</div>
+							<div class="mt-0">
+								<p class="text-base text-sm font-semibold">
+									{video.title}
+								</p>
+							</div>
+						</a>
 					</div>
 				{/each}
 			</div>
