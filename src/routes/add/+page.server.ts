@@ -25,7 +25,7 @@ export const actions = {
 			thumbnailGif: '',
 			orginalTitle: (data.get('orginalTitle') as string) || '',
 			orginalUrl: (data.get('orginalUrl') as string) || '',
-			directory: (data.get('directory') as string) || '',
+			directory: null,
 			durationSec: 0,
 			tags: ['Felix', 'hallo', 'qfsdf']
 		};

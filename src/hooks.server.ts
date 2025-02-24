@@ -23,7 +23,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 				thumbnailGif TEXT,
 				orginalTitle TEXT,
 				orginalUrl TEXT,
-				directory TEXT,
+				directory INTEGER,
 				durationSec INTEGER,
 				tags TEXT
 			)`;
@@ -31,6 +31,32 @@ export const handle: Handle = async ({ event, resolve }) => {
 			if (err) {
 				throw err;
 			}
+		});
+
+		// Create a table for directorys
+		const directoryQuery = `
+			CREATE TABLE IF NOT EXISTS directories (
+				id INTEGER PRIMARY KEY AUTOINCREMENT,
+				name TEXT,
+				thumbnailPath TEXT,
+				parentDirectory INTEGER,
+				FOREIGN KEY (parentDirectory) REFERENCES directories(id)
+			)`;
+		db.run(directoryQuery, (err) => {
+			if (err) {
+				throw err;
+			}
+
+			// Insert the first directory entry with name 'root'
+			/*const insertRootDirectory = `
+				INSERT INTO directories (name, thumbnailPath, parentDirectory)
+				VALUES ('root', "", NULL)
+			`;
+			db.run(insertRootDirectory, (err) => {
+				if (err) {
+					throw err;
+				}
+			});*/
 		});
 	}
 	const resp = await resolve(event);

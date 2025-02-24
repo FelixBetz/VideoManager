@@ -7,7 +7,7 @@
 
 		video.orginalTitle = 'dummy';
 		video.orginalUrl = 'dummy';
-		video.directory = 'dummy';
+		video.directory = null;
 	}
 
 	let video: Video = $state({
@@ -18,7 +18,7 @@
 		thumbnailGif: '',
 		orginalTitle: '',
 		orginalUrl: '',
-		directory: '',
+		directory: null,
 		durationSec: 0,
 		tags: []
 	});
@@ -66,17 +66,7 @@
 			class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
 		/>
 	</div>
-	<div>
-		<label for="directory" class="block text-sm font-medium text-gray-700">Directory:</label>
-		<input
-			type="text"
-			id="directory"
-			name="directory"
-			bind:value={video.directory}
-			required
-			class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-		/>
-	</div>
+
 	<div>
 		<label for="videoFile" class="block text-sm font-medium text-gray-700">Upload Video File:</label
 		>
