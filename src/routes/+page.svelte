@@ -5,9 +5,11 @@
 	import { onMount } from 'svelte';
 	let { data } = $props();
 
-	let rootDirectory: Directory = $derived(data.rootDirectory);
+	let rootDirectory: Directory = $state(data.rootDirectory);
 
 	let currentDir: Directory | null = $state(null);
+
+	let newDirName = $state('');
 
 	onMount(() => {
 		currentDir = rootDirectory;
@@ -22,12 +24,40 @@
 	function getDirectory(pDirectroy: Directory) {
 		currentDir = pDirectroy;
 	}
+
+	function addDirectory() {
+		if (currentDir && newDirName.trim()) {
+			rootDirectory.subDirectories.push({
+				id: -1,
+				name: newDirName,
+				subDirectories: [],
+				videos: [],
+				parentDirectory: currentDir.id
+			});
+			newDirName = '';
+		}
+	}
 </script>
 
 <div class=" flex">
 	<!-- Directory Tree -->
 	<div class="directory-tree w-200px rounded-lg bg-gray-100 p-4 shadow-md">
 		<DirTree {getDirectory} directory={rootDirectory} />
+		<div class="mt-2 flex items-center">
+			<input
+				type="text"
+				bind:value={newDirName}
+				placeholder="New directory name"
+				class="flex-grow rounded border p-1 text-xs"
+				style="width: calc(100% - 40px);"
+			/>
+			<button
+				onclick={addDirectory}
+				class="ml-1 rounded bg-blue-500 p-1 pr-2 pl-2 text-xs text-white"
+			>
+				+
+			</button>
+		</div>
 	</div>
 
 	<!-- Video Gallery -->
