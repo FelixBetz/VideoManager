@@ -11,6 +11,8 @@
 
 	let newDirName = $state('');
 
+	let isListView = $state(false);
+
 	onMount(() => {
 		currentDir = rootDirectory;
 	});
@@ -36,6 +38,10 @@
 			});
 			newDirName = '';
 		}
+	}
+
+	function toggleView() {
+		isListView = !isListView;
 	}
 </script>
 
@@ -63,44 +69,65 @@
 	<!-- Video Gallery -->
 	<div class="video-gallery-container flex-1 p-4">
 		{#if currentDir}
-			<h1 class="mb-4 text-xl font-bold">
-				{currentDir.name} <span class="text-sm italic">({currentDir.videos.length} Videos)</span>
-			</h1>
+			<div class="mb-4 flex items-center justify-between">
+				<h1 class="text-xl font-bold">
+					{currentDir.name} <span class="text-sm italic">({currentDir.videos.length} Videos)</span>
+				</h1>
+				<button onclick={toggleView} class="rounded bg-blue-500 p-1 pr-2 pl-2 text-xs text-white">
+					Toggle View
+				</button>
+			</div>
 			{#if currentDir.videos.length === 0}
 				<h1 class="text-sm italic">No videos</h1>
 			{/if}
 
-			<div
-				class="video-gallery grid gap-3"
-				style="grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));"
-			>
-				{#each currentDir.videos as video}
-					<div class="video-card-container">
-						<a href={`/video/${video.id}`} target="_blank" rel="noopener noreferrer">
-							<div class="video-card overflow-hidden rounded-lg bg-white shadow-md">
-								<div class="video-body relative">
-									<img
-										src={video.thumbnailImg}
-										alt="{video.title} thumbnail"
-										class="static h-auto w-full"
-									/>
-									<img src={video.thumbnailGif} alt="{video.title} gif" class="gif h-auto w-full" />
-									<div
-										class="video-duration bg-opacity-75 absolute right-2 bottom-2 rounded bg-black px-2 py-1 text-xs text-white"
-									>
-										{formatDuration(video.durationSec)}
+			{#if isListView}
+				<ul class="video-list">
+					{#each currentDir.videos as video}
+						<li class="video-list-item">
+							<a href={`/video/${video.id}`} target="_blank" rel="noopener noreferrer">
+								{video.title} ({formatDuration(video.durationSec)})
+							</a>
+						</li>
+					{/each}
+				</ul>
+			{:else}
+				<div
+					class="video-gallery grid gap-3"
+					style="grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));"
+				>
+					{#each currentDir.videos as video}
+						<div class="video-card-container">
+							<a href={`/video/${video.id}`} target="_blank" rel="noopener noreferrer">
+								<div class="video-card overflow-hidden rounded-lg bg-white shadow-md">
+									<div class="video-body relative">
+										<img
+											src={video.thumbnailImg}
+											alt="{video.title} thumbnail"
+											class="static h-auto w-full"
+										/>
+										<img
+											src={video.thumbnailGif}
+											alt="{video.title} gif"
+											class="gif h-auto w-full"
+										/>
+										<div
+											class="video-duration bg-opacity-75 absolute right-2 bottom-2 rounded bg-black px-2 py-1 text-xs text-white"
+										>
+											{formatDuration(video.durationSec)}
+										</div>
 									</div>
 								</div>
-							</div>
-							<div class="mt-0">
-								<p class="text-base text-sm font-semibold">
-									{video.title}
-								</p>
-							</div>
-						</a>
-					</div>
-				{/each}
-			</div>
+								<div class="mt-0">
+									<p class="text-base text-sm font-semibold">
+										{video.title}
+									</p>
+								</div>
+							</a>
+						</div>
+					{/each}
+				</div>
+			{/if}
 		{/if}
 	</div>
 </div>
@@ -123,5 +150,13 @@
 	}
 	.video-card-container {
 		width: 200px;
+	}
+	.video-list {
+		list-style-type: none;
+		padding: 0;
+	}
+	.video-list-item {
+		padding: 8px;
+		border-bottom: 1px solid #ddd;
 	}
 </style>
