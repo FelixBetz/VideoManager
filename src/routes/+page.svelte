@@ -3,6 +3,7 @@
 
 	import type { Directory, Video } from '$lib/types';
 	import { onMount } from 'svelte';
+
 	let { data } = $props();
 
 	let rootDirectory: Directory = $state(data.rootDirectory);
@@ -42,10 +43,6 @@
 			});
 			newDirName = '';
 		}
-	}
-
-	function toggleView() {
-		isListView = !isListView;
 	}
 </script>
 
