@@ -46,13 +46,9 @@
 	}
 </script>
 
-<form method="POST">
-	<input type="hidden" name="rootDirectory" value={JSON.stringify(rootDirectory)} />
-	<button type="submit" class="rounded bg-blue-500 p-1 pr-2 pl-2 text-xs text-white">save</button>
-</form>
 <div class=" flex">
 	<!-- Directory Tree -->
-	<div class="directory-tree w-200px overflow-y-auto rounded-lg bg-gray-100 p-4 shadow-md">
+	<div class="directory-tree w-200px overflow-y-auto rounded-lg bg-gray-100 p-4 pt-1 shadow-md">
 		<DirTree {selectDirectory} directory={rootDirectory} {currentDir} />
 		<div class="mt-2 flex items-center">
 			<input
@@ -70,20 +66,64 @@
 				+
 			</button>
 		</div>
+
+		<form method="POST">
+			<input type="hidden" name="rootDirectory" value={JSON.stringify(rootDirectory)} />
+			<button type="submit" class="rounded bg-blue-500 p-1 pr-2 pl-2 text-xs text-white"
+				>save</button
+			>
+		</form>
 	</div>
 
 	<!-- Video Gallery -->
-	<div class="video-gallery-container flex-1 overflow-y-auto p-4">
+	<div class="video-gallery-container flex-1 overflow-y-auto p-4 pt-1">
 		{#if currentDir}
 			<div class="mb-4 flex items-center justify-between">
 				<h1 class="text-xl font-bold">
 					{currentDir.name}
 					<span class="text-sm italic">({currentDir.videoIds.length} Videos) </span>
 				</h1>
-				<button onclick={toggleView} class="rounded bg-blue-500 p-1 pr-2 pl-2 text-xs text-white">
-					Toggle View
-				</button>
+
+				<div class="inline-flex">
+					<button
+						aria-label="Video View"
+						class="m-0 rounded-l p-2 pr-1 text-gray-800 hover:bg-gray-500 hover:text-gray-300 {!isListView
+							? 'bg-blue-300'
+							: 'bg-gray-400'}"
+						onclick={() => (isListView = false)}
+					>
+						<svg
+							class="mr-2 h-4 w-4 fill-current"
+							xmlns="http://www.w3.org/2000/svg"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						>
+							<rect x="3" y="3" width="7" height="7"></rect>
+							<rect x="14" y="3" width="7" height="7"></rect>
+							<rect x="14" y="14" width="7" height="7"></rect>
+							<rect x="3" y="14" width="7" height="7"></rect>
+						</svg>
+					</button>
+					<button
+						aria-label="List View"
+						class="m-0 rounded-r p-2 pr-1 text-gray-800 hover:bg-gray-500 hover:text-gray-300 {isListView
+							? 'bg-blue-300'
+							: 'bg-gray-400'}"
+						onclick={() => (isListView = true)}
+					>
+						<svg
+							class="mr-2 h-4 w-4 fill-current"
+							xmlns="http://www.w3.org/2000/svg"
+							viewBox="0 0 20 20"><path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z" /></svg
+						>
+					</button>
+				</div>
 			</div>
+
 			{#if videos.length === 0}
 				<h1 class="text-sm italic">No videos</h1>
 			{/if}
