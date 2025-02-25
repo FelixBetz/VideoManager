@@ -35,10 +35,10 @@ export const handle: Handle = async ({ event, resolve }) => {
 		const directoryQuery = `
 			CREATE TABLE IF NOT EXISTS directories (
 				id INTEGER PRIMARY KEY AUTOINCREMENT,
-				name TEXT,
-				videos TEXT,
-				subDirectories Text 
+				tree TEXT,
+				modifiedDate TEXT
 			)`;
+
 		db.run(directoryQuery, (err) => {
 			if (err) {
 				throw err;
@@ -48,17 +48,3 @@ export const handle: Handle = async ({ event, resolve }) => {
 	const resp = await resolve(event);
 	return resp;
 };
-
-// Function to convert array of numbers to JSON string
-export function arrayToJsonString(array: number[]): string {
-	return JSON.stringify(array);
-}
-
-// Function to convert JSON string to array of numbers
-export function jsonStringToArray(jsonString: string | number[]): number[] {
-	if (typeof jsonString != 'string' || jsonString === null || jsonString === '') {
-		return [];
-	}
-
-	return JSON.parse(jsonString);
-}

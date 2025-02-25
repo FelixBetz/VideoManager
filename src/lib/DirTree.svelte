@@ -6,15 +6,14 @@
 	let expanded = $state(true);
 
 	let {
-		getDirectory,
+		selectDirectory,
 		directory = {
-			id: 0,
 			name: '',
 			subDirectories: [],
-			videos: []
+			videoIds: []
 		}
 	}: {
-		getDirectory: (pDirectroy: Directory) => void;
+		selectDirectory: (pDirectroy: Directory) => void;
 		directory: Directory;
 	} = $props();
 
@@ -23,7 +22,7 @@
 	}
 </script>
 
-<button class:expanded class="dir-button" onclick={() => getDirectory(directory)}
+<button class:expanded class="dir-button" onclick={() => selectDirectory(directory)}
 	>{directory.name}
 </button>
 {#if directory.subDirectories.length > 0}
@@ -34,7 +33,7 @@
 	<ul transition:slide={{ duration: 300 }}>
 		{#each directory.subDirectories as subdir}
 			<li>
-				<DirTree {getDirectory} directory={subdir} />
+				<DirTree {selectDirectory} directory={subdir} />
 			</li>
 		{/each}
 	</ul>

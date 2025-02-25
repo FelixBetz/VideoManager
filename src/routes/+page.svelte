@@ -1,13 +1,19 @@
 <script lang="ts">
 	import DirTree from '$lib/DirTree.svelte';
 
-	import type { Directory } from '$lib/types';
+	import type { Directory, Video } from '$lib/types';
 	import { onMount } from 'svelte';
 	let { data } = $props();
 
 	let rootDirectory: Directory = $state(data.rootDirectory);
 
 	let currentDir: Directory | null = $state(null);
+
+	let videos: Video[] = $derived(
+		!currentDir
+			? []
+			: data.videos.filter((video) => currentDir && currentDir.videoIds.includes(video.id))
+	);
 
 	let newDirName = $state('');
 
@@ -23,17 +29,16 @@
 		return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
 	}
 
-	function getDirectory(pDirectroy: Directory) {
+	function selectDirectory(pDirectroy: Directory) {
 		currentDir = pDirectroy;
 	}
 
 	function addDirectory() {
 		if (currentDir && newDirName.trim()) {
 			rootDirectory.subDirectories.push({
-				id: -1,
 				name: newDirName,
 				subDirectories: [],
-				videos: []
+				videoIds: []
 			});
 			newDirName = '';
 		}
@@ -47,7 +52,7 @@
 <div class=" flex">
 	<!-- Directory Tree -->
 	<div class="directory-tree w-200px overflow-y-auto rounded-lg bg-gray-100 p-4 shadow-md">
-		<DirTree {getDirectory} directory={rootDirectory} />
+		<DirTree {selectDirectory} directory={rootDirectory} />
 		<div class="mt-2 flex items-center">
 			<input
 				type="text"
@@ -70,19 +75,20 @@
 		{#if currentDir}
 			<div class="mb-4 flex items-center justify-between">
 				<h1 class="text-xl font-bold">
-					{currentDir.name} <span class="text-sm italic">({currentDir.videos.length} Videos)</span>
+					{currentDir.name}
+					<span class="text-sm italic">({currentDir.videoIds.length} Videos) </span>
 				</h1>
 				<button onclick={toggleView} class="rounded bg-blue-500 p-1 pr-2 pl-2 text-xs text-white">
 					Toggle View
 				</button>
 			</div>
-			{#if currentDir.videos.length === 0}
+			{#if videos.length === 0}
 				<h1 class="text-sm italic">No videos</h1>
 			{/if}
 
 			{#if isListView}
 				<ul class="video-list">
-					{#each currentDir.videos as video}
+					{#each videos as video}
 						<li class="video-list-item">
 							<a href={`/video/${video.id}`} target="_blank" rel="noopener noreferrer">
 								{video.title} ({formatDuration(video.durationSec)})
@@ -95,7 +101,7 @@
 					class="video-gallery grid gap-3"
 					style="grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));"
 				>
-					{#each currentDir.videos as video}
+					{#each videos as video}
 						<div class="video-card-container">
 							<a href={`/video/${video.id}`} target="_blank" rel="noopener noreferrer">
 								<div class="video-card overflow-hidden rounded-lg bg-white shadow-md">

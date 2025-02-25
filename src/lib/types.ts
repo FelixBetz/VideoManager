@@ -9,18 +9,14 @@ export interface Video {
 	durationSec: number;
 }
 
-export interface DbDirectory {
-	id: number;
+export interface Directory {
 	name: string;
-	subDirectories: string;
-	videos: string;
+	videoIds: number[];
+	subDirectories: Directory[];
 }
 
-export interface Directory {
+export interface DbDirectoryTree {
 	id: number;
-	name: string;
-	subDirectories: Directory[];
-	subDirectoriesIds: number[];
-	videos: Video[];
-	videosIds: number[];
+	tree: string;
+	modifiedDate: string;
 }
