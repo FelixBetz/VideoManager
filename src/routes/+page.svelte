@@ -49,6 +49,10 @@
 	}
 </script>
 
+<form method="POST">
+	<input type="hidden" name="rootDirectory" value={JSON.stringify(rootDirectory)} />
+	<button type="submit" class="rounded bg-blue-500 p-1 pr-2 pl-2 text-xs text-white">save</button>
+</form>
 <div class=" flex">
 	<!-- Directory Tree -->
 	<div class="directory-tree w-200px overflow-y-auto rounded-lg bg-gray-100 p-4 shadow-md">
@@ -60,6 +64,7 @@
 				placeholder="New directory name"
 				class="flex-grow rounded border p-1 text-xs"
 				style="width: calc(100% - 40px);"
+				onkeydown={(e) => e.key === 'Enter' && addDirectory()}
 			/>
 			<button
 				onclick={addDirectory}

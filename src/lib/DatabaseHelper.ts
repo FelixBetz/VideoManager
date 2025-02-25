@@ -1,6 +1,20 @@
 import type { DbDirectoryTree, Directory, Video } from '$lib/types';
 import type { Database } from 'sqlite3';
 
+export async function saveData(pDb: Database, pDataString: string) {
+	const insertDirectoryPromise = new Promise<void>((resolve, reject) => {
+		const query = 'INSERT INTO directories (tree) VALUES (?)';
+		pDb.run(query, pDataString, (err: Error | null) => {
+			if (err) {
+				reject(err);
+				return;
+			}
+			resolve();
+		});
+	});
+	await insertDirectoryPromise;
+}
+
 export async function parseData(pDb: Database) {
 	//load videos from database
 	const loadVideoDataPromise = new Promise<Video[]>((resolve, reject) => {
