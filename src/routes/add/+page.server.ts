@@ -25,7 +25,6 @@ export const actions = {
 			thumbnailGif: '',
 			orginalTitle: (data.get('orginalTitle') as string) || '',
 			orginalUrl: (data.get('orginalUrl') as string) || '',
-			directory: null,
 			durationSec: 0
 		};
 
@@ -56,7 +55,7 @@ export const actions = {
 
 			const duration: number = (await getVideoDuration(videoFilePath)) as number;
 
-			const step = duration / 10; // Divide video into 10 equal segments
+			const step = duration / 20; // Divide video into 10 equal segments
 			const selectFilter = `select='isnan(prev_selected_t) + gt(t, prev_selected_t+${step.toFixed(2)})',setpts=N/FRAME_RATE/TB`;
 
 			await new Promise((resolve, reject) => {
@@ -87,8 +86,8 @@ export const actions = {
 
 		const insertVideoPromise = new Promise<void>((resolve, reject) => {
 			const query = `
-            INSERT INTO videos (title, videoPath, thumbnailImg, thumbnailGif, orginalTitle, orginalUrl, directory, durationSec)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO videos (title, videoPath, thumbnailImg, thumbnailGif, orginalTitle, orginalUrl, durationSec)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
             `;
 			db.run(
 				query,
@@ -99,7 +98,6 @@ export const actions = {
 					video.thumbnailGif,
 					video.orginalTitle,
 					video.orginalUrl,
-					video.directory,
 					video.durationSec
 				],
 				(err: Error | null) => {

@@ -7,7 +7,6 @@
 
 		video.orginalTitle = 'dummy';
 		video.orginalUrl = 'dummy';
-		video.directory = null;
 	}
 
 	let video: Video = $state({
@@ -18,7 +17,6 @@
 		thumbnailGif: '',
 		orginalTitle: '',
 		orginalUrl: '',
-		directory: null,
 		durationSec: 0,
 		tags: []
 	});

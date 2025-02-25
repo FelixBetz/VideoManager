@@ -10,7 +10,6 @@
 		directory = {
 			id: 0,
 			name: '',
-			parentDirectory: null,
 			subDirectories: [],
 			videos: []
 		}

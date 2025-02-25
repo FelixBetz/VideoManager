@@ -23,7 +23,6 @@ export const handle: Handle = async ({ event, resolve }) => {
 				thumbnailGif TEXT,
 				orginalTitle TEXT,
 				orginalUrl TEXT,
-				directory INTEGER,
 				durationSec INTEGER
 			)`;
 		db.run(videoQuery, (err) => {
@@ -32,31 +31,34 @@ export const handle: Handle = async ({ event, resolve }) => {
 			}
 		});
 
-		// Create a table for directorys
+		// Create a table for directories
 		const directoryQuery = `
 			CREATE TABLE IF NOT EXISTS directories (
 				id INTEGER PRIMARY KEY AUTOINCREMENT,
 				name TEXT,
-				parentDirectory INTEGER,
-				FOREIGN KEY (parentDirectory) REFERENCES directories(id)
+				videos TEXT,
+				subDirectories Text 
 			)`;
 		db.run(directoryQuery, (err) => {
 			if (err) {
 				throw err;
 			}
-
-			// Insert the first directory entry with name 'root'
-			/*const insertRootDirectory = `
-				INSERT INTO directories (name, thumbnailPath, parentDirectory)
-				VALUES ('root', "", NULL)
-			`;
-			db.run(insertRootDirectory, (err) => {
-				if (err) {
-					throw err;
-				}
-			});*/
 		});
 	}
 	const resp = await resolve(event);
 	return resp;
 };
+
+// Function to convert array of numbers to JSON string
+export function arrayToJsonString(array: number[]): string {
+	return JSON.stringify(array);
+}
+
+// Function to convert JSON string to array of numbers
+export function jsonStringToArray(jsonString: string | number[]): number[] {
+	if (typeof jsonString != 'string' || jsonString === null || jsonString === '') {
+		return [];
+	}
+
+	return JSON.parse(jsonString);
+}

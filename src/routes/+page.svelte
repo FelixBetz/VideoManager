@@ -33,8 +33,7 @@
 				id: -1,
 				name: newDirName,
 				subDirectories: [],
-				videos: [],
-				parentDirectory: currentDir.id
+				videos: []
 			});
 			newDirName = '';
 		}
