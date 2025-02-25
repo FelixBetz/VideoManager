@@ -45,7 +45,7 @@ export async function parseData(pDb: Database) {
 	);
 	const directoryTree: DbDirectoryTree | undefined = await loadLatestDirectoryDataPromise;
 
-	let rootDirectory: Directory = { name: 'root', videoIds: [], subDirectories: [] };
+	let rootDirectory: Directory = { name: '/', videoIds: [], subDirectories: [] };
 
 	if (directoryTree) {
 		try {

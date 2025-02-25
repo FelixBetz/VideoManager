@@ -29,8 +29,8 @@
 		return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
 	}
 
-	function selectDirectory(pDirectroy: Directory) {
-		currentDir = pDirectroy;
+	function selectDirectory(pDirectory: Directory) {
+		currentDir = pDirectory;
 	}
 
 	function addDirectory() {
@@ -56,7 +56,7 @@
 <div class=" flex">
 	<!-- Directory Tree -->
 	<div class="directory-tree w-200px overflow-y-auto rounded-lg bg-gray-100 p-4 shadow-md">
-		<DirTree {selectDirectory} directory={rootDirectory} />
+		<DirTree {selectDirectory} directory={rootDirectory} {currentDir} />
 		<div class="mt-2 flex items-center">
 			<input
 				type="text"
