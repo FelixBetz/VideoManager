@@ -147,7 +147,11 @@
 			{#if isListView}
 				<ul class="video-list">
 					{#each videos as video}
-						<li class="video-list-item">
+						<li
+							class="video-list-item"
+							ondragstart={() => (dragVideoId = video.id)}
+							role="video {video.title}"
+						>
 							<a href={`/video/${video.id}`} target="_blank" rel="noopener noreferrer">
 								{video.title} ({formatDuration(video.durationSec)})
 							</a>
