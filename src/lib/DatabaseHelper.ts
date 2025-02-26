@@ -69,10 +69,10 @@ export function isVideoIdInDiretory(pDirectory: Directory, pVideoId: number): bo
 		return true;
 	}
 
-	pDirectory.subDirectories.forEach((subDirectory) => {
+	for (const subDirectory of pDirectory.subDirectories) {
 		if (isVideoIdInDiretory(subDirectory, pVideoId)) {
 			return true;
 		}
-	});
+	}
 	return false;
 }
