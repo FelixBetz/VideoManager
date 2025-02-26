@@ -14,13 +14,15 @@
 		currentDir = null,
 		selectDirectory,
 		onDrop,
-		onDragOver
+		onDragOver,
+		onDragStart
 	}: {
 		selectDirectory: (pDirectroy: Directory) => void;
 		directory: Directory;
 		currentDir: Directory | null;
 		onDrop: (event: DragEvent, pDirectory: Directory) => void;
 		onDragOver: (event: DragEvent) => void;
+		onDragStart: (event: DragEvent, pDirectory: Directory) => void;
 	} = $props();
 
 	function toggle() {
@@ -32,7 +34,9 @@
 	class:selected={directory === currentDir}
 	ondrop={(event) => onDrop(event, directory)}
 	ondragover={onDragOver}
+	ondragstart={(event) => onDragStart(event, directory)}
 	role="director {directory.name}"
+	draggable="true"
 >
 	<button class:expanded class="dir-button" onclick={() => selectDirectory(directory)}
 		>{directory.name}
@@ -46,7 +50,14 @@
 	<ul transition:slide={{ duration: 300 }}>
 		{#each directory.subDirectories as subdir}
 			<li>
-				<DirTree {selectDirectory} directory={subdir} {currentDir} {onDragOver} {onDrop} />
+				<DirTree
+					{selectDirectory}
+					directory={subdir}
+					{currentDir}
+					{onDragOver}
+					{onDrop}
+					{onDragStart}
+				/>
 			</li>
 		{/each}
 	</ul>

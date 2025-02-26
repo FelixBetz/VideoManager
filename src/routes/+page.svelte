@@ -55,16 +55,30 @@
 		}
 	}
 
+	function onDragStartDirectory(event: DragEvent, pDirectory: Directory) {
+		console.log('Directory drag start');
+		if (event.dataTransfer) {
+			event.dataTransfer.setData(
+				'application/json',
+				JSON.stringify({ isVideo: false, directory: pDirectory })
+			);
+		}
+	}
+
 	function onDrop(event: DragEvent, pDirectory: Directory) {
 		event.preventDefault();
-		if (event.dataTransfer && currentDir && currentDir !== pDirectory) {
+		if (event.dataTransfer) {
 			const data = JSON.parse(event.dataTransfer.getData('application/json'));
 
 			// Dragging a video
-			if (data.isVideo) {
+			if (data.isVideo && currentDir && currentDir !== pDirectory) {
 				const dragVideoId = data.id;
 				currentDir.videoIds = removeNumber(currentDir.videoIds, dragVideoId);
 				pDirectory.videoIds.push(dragVideoId);
+			}
+			//Dragging a directory
+			else {
+				console.log('log directory');
 			}
 		}
 	}
@@ -77,7 +91,14 @@
 <div class=" flex">
 	<!-- Directory Tree -->
 	<div class="directory-tree w-200px overflow-y-auto rounded-lg bg-gray-100 p-4 pt-1 shadow-md">
-		<DirTree {selectDirectory} directory={rootDirectory} {currentDir} {onDrop} {onDragOver} />
+		<DirTree
+			{selectDirectory}
+			directory={rootDirectory}
+			{currentDir}
+			{onDrop}
+			{onDragOver}
+			onDragStart={onDragStartDirectory}
+		/>
 		<div class="mt-2 flex items-center">
 			<input
 				type="text"
