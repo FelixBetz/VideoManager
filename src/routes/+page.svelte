@@ -21,8 +21,6 @@
 
 	let isListView = $state(false);
 
-	let dragVideoId = $state(-1);
-
 	onMount(() => {
 		currentDir = rootDirectory;
 	});
@@ -48,13 +46,27 @@
 		}
 	}
 
+	function onDragStartVideo(event: DragEvent, pVideo: Video) {
+		if (event.dataTransfer) {
+			event.dataTransfer.setData(
+				'application/json',
+				JSON.stringify({ isVideo: true, id: pVideo.id })
+			);
+		}
+	}
+
 	function onDrop(event: DragEvent, pDirectory: Directory) {
 		event.preventDefault();
-		if (dragVideoId != -1 && currentDir && currentDir !== pDirectory) {
-			currentDir.videoIds = removeNumber(currentDir.videoIds, dragVideoId);
-			pDirectory.videoIds.push(dragVideoId);
+		if (event.dataTransfer && currentDir && currentDir !== pDirectory) {
+			const data = JSON.parse(event.dataTransfer.getData('application/json'));
+
+			// Dragging a video
+			if (data.isVideo) {
+				const dragVideoId = data.id;
+				currentDir.videoIds = removeNumber(currentDir.videoIds, dragVideoId);
+				pDirectory.videoIds.push(dragVideoId);
+			}
 		}
-		dragVideoId = -1;
 	}
 
 	function onDragOver(event: DragEvent) {
@@ -149,7 +161,7 @@
 					{#each videos as video}
 						<li
 							class="video-list-item"
-							ondragstart={() => (dragVideoId = video.id)}
+							ondragstart={(event) => onDragStartVideo(event, video)}
 							role="video {video.title}"
 						>
 							<a href={`/video/${video.id}`} target="_blank" rel="noopener noreferrer">
@@ -164,9 +176,10 @@
 					style="grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));"
 				>
 					{#each videos as video}
+						<!-- todo ondragend={() => (dragVideoId = -1)}-->
 						<div
 							class="video-card-container"
-							ondragstart={() => (dragVideoId = video.id)}
+							ondragstart={(event) => onDragStartVideo(event, video)}
 							role="video {video.title}"
 						>
 							<a href={`/video/${video.id}`} target="_blank" rel="noopener noreferrer">
