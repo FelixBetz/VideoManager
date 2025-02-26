@@ -6,17 +6,21 @@
 	let expanded = $state(true);
 
 	let {
-		selectDirectory,
 		directory = {
 			name: '',
 			subDirectories: [],
 			videoIds: []
 		},
-		currentDir = null
+		currentDir = null,
+		selectDirectory,
+		onDrop,
+		onDragOver
 	}: {
 		selectDirectory: (pDirectroy: Directory) => void;
 		directory: Directory;
 		currentDir: Directory | null;
+		onDrop: (event: DragEvent, pDirectory: Directory) => void;
+		onDragOver: (event: DragEvent) => void;
 	} = $props();
 
 	function toggle() {
@@ -24,7 +28,12 @@
 	}
 </script>
 
-<div class:selected={directory === currentDir}>
+<div
+	class:selected={directory === currentDir}
+	ondrop={(event) => onDrop(event, directory)}
+	ondragover={onDragOver}
+	role="director {directory.name}"
+>
 	<button class:expanded class="dir-button" onclick={() => selectDirectory(directory)}
 		>{directory.name}
 	</button>
@@ -37,7 +46,7 @@
 	<ul transition:slide={{ duration: 300 }}>
 		{#each directory.subDirectories as subdir}
 			<li>
-				<DirTree {selectDirectory} directory={subdir} {currentDir} />
+				<DirTree {selectDirectory} directory={subdir} {currentDir} {onDragOver} {onDrop} />
 			</li>
 		{/each}
 	</ul>

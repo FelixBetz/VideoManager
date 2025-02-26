@@ -1,6 +1,7 @@
 <script lang="ts">
 	import DirTree from '$lib/DirTree.svelte';
 
+	import { removeNumber } from '$lib/utils';
 	import type { Directory, Video } from '$lib/types';
 	import { onMount } from 'svelte';
 
@@ -19,6 +20,8 @@
 	let newDirName = $state('');
 
 	let isListView = $state(false);
+
+	let dragVideoId = $state(-1);
 
 	onMount(() => {
 		currentDir = rootDirectory;
@@ -44,12 +47,25 @@
 			newDirName = '';
 		}
 	}
+
+	function onDrop(event: DragEvent, pDirectory: Directory) {
+		event.preventDefault();
+		if (dragVideoId != -1 && currentDir && currentDir !== pDirectory) {
+			currentDir.videoIds = removeNumber(currentDir.videoIds, dragVideoId);
+			pDirectory.videoIds.push(dragVideoId);
+		}
+		dragVideoId = -1;
+	}
+
+	function onDragOver(event: DragEvent) {
+		event.preventDefault();
+	}
 </script>
 
 <div class=" flex">
 	<!-- Directory Tree -->
 	<div class="directory-tree w-200px overflow-y-auto rounded-lg bg-gray-100 p-4 pt-1 shadow-md">
-		<DirTree {selectDirectory} directory={rootDirectory} {currentDir} />
+		<DirTree {selectDirectory} directory={rootDirectory} {currentDir} {onDrop} {onDragOver} />
 		<div class="mt-2 flex items-center">
 			<input
 				type="text"
@@ -144,7 +160,11 @@
 					style="grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));"
 				>
 					{#each videos as video}
-						<div class="video-card-container">
+						<div
+							class="video-card-container"
+							ondragstart={() => (dragVideoId = video.id)}
+							role="video {video.title}"
+						>
 							<a href={`/video/${video.id}`} target="_blank" rel="noopener noreferrer">
 								<div class="video-card overflow-hidden rounded-lg bg-white shadow-md">
 									<div class="video-body relative">
