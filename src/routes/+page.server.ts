@@ -1,4 +1,4 @@
-import { parseData, saveData } from '$lib/DatabaseHelper';
+import { parseData, saveData } from '$lib/DatabaseUtils';
 export async function load({ locals }) {
 	return parseData(locals.db);
 }
