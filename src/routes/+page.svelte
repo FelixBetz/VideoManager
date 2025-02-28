@@ -57,7 +57,6 @@
 	}
 
 	function onDragStartDirectory(event: DragEvent, pDirectory: Directory) {
-		console.log('Directory drag start');
 		if (event.dataTransfer) {
 			event.dataTransfer.setData(
 				'application/json',
@@ -79,7 +78,36 @@
 			}
 			//Dragging a directory
 			else {
-				console.log('log directory');
+				const draggedDirectory: Directory = data.directory;
+				if (
+					draggedDirectory.uuid != pDirectory.uuid &&
+					draggedDirectory.uuid != rootDirectory.uuid
+				) {
+					const isSubDirectory = (parent: Directory, child: Directory): boolean => {
+						if (parent.uuid === child.uuid) return true;
+						for (const subDir of parent.subDirectories) {
+							if (isSubDirectory(subDir, child)) return true;
+						}
+						return false;
+					};
+
+					const findAndMoveDirectory = (directory: Directory, targetDirectory: Directory) => {
+						for (let i = 0; i < directory.subDirectories.length; i++) {
+							if (directory.subDirectories[i].uuid === draggedDirectory.uuid) {
+								const [movedDirectory] = directory.subDirectories.splice(i, 1);
+								targetDirectory.subDirectories.push(movedDirectory);
+								return true;
+							} else if (findAndMoveDirectory(directory.subDirectories[i], targetDirectory)) {
+								return true;
+							}
+						}
+						return false;
+					};
+
+					if (!isSubDirectory(draggedDirectory, pDirectory)) {
+						findAndMoveDirectory(rootDirectory, pDirectory);
+					}
+				}
 			}
 		}
 	}
