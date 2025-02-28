@@ -1,8 +1,8 @@
 <script lang="ts">
 	import DirTree from '$lib/DirTree.svelte';
 	import { v4 as uuidv4 } from 'uuid';
-	import { removeNumber } from '$lib/utils';
-	import type { Directory, Video } from '$lib/types';
+	import { formatDuration, removeNumber } from '$lib/utils';
+	import { type Directory, type Video, isSubDirectory, findAndMoveDirectory } from '$lib/types';
 	import { onMount } from 'svelte';
 
 	let { data } = $props();
@@ -24,12 +24,6 @@
 	onMount(() => {
 		currentDir = rootDirectory;
 	});
-
-	function formatDuration(seconds: number): string {
-		const minutes = Math.floor(seconds / 60);
-		const remainingSeconds = seconds % 60;
-		return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
-	}
 
 	function selectDirectory(pDirectory: Directory) {
 		currentDir = pDirectory;
@@ -83,29 +77,8 @@
 					draggedDirectory.uuid != pDirectory.uuid &&
 					draggedDirectory.uuid != rootDirectory.uuid
 				) {
-					const isSubDirectory = (parent: Directory, child: Directory): boolean => {
-						if (parent.uuid === child.uuid) return true;
-						for (const subDir of parent.subDirectories) {
-							if (isSubDirectory(subDir, child)) return true;
-						}
-						return false;
-					};
-
-					const findAndMoveDirectory = (directory: Directory, targetDirectory: Directory) => {
-						for (let i = 0; i < directory.subDirectories.length; i++) {
-							if (directory.subDirectories[i].uuid === draggedDirectory.uuid) {
-								const [movedDirectory] = directory.subDirectories.splice(i, 1);
-								targetDirectory.subDirectories.push(movedDirectory);
-								return true;
-							} else if (findAndMoveDirectory(directory.subDirectories[i], targetDirectory)) {
-								return true;
-							}
-						}
-						return false;
-					};
-
 					if (!isSubDirectory(draggedDirectory, pDirectory)) {
-						findAndMoveDirectory(rootDirectory, pDirectory);
+						findAndMoveDirectory(rootDirectory, pDirectory, draggedDirectory);
 					}
 				}
 			}
