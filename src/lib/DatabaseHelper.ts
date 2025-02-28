@@ -1,6 +1,8 @@
 import type { DbDirectoryTree, Directory, Video } from '$lib/types';
 import type { Database } from 'sqlite3';
 
+import { v4 as uuidv4 } from 'uuid';
+
 export async function saveData(pDb: Database, pDataString: string) {
 	const insertDirectoryPromise = new Promise<void>((resolve, reject) => {
 		const query = 'INSERT INTO directories (tree) VALUES (?)';
@@ -45,7 +47,7 @@ export async function parseData(pDb: Database) {
 	);
 	const directoryTree: DbDirectoryTree | undefined = await loadLatestDirectoryDataPromise;
 
-	let rootDirectory: Directory = { name: '/', videoIds: [], subDirectories: [] };
+	let rootDirectory: Directory = { uuid: uuidv4(), name: '/', videoIds: [], subDirectories: [] };
 
 	if (directoryTree) {
 		try {

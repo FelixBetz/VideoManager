@@ -7,6 +7,7 @@
 
 	let {
 		directory = {
+			uuid: '',
 			name: '',
 			subDirectories: [],
 			videoIds: []

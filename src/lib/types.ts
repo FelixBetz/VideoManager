@@ -10,6 +10,7 @@ export interface Video {
 }
 
 export interface Directory {
+	uuid: string;
 	name: string;
 	videoIds: number[];
 	subDirectories: Directory[];

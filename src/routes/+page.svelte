@@ -1,6 +1,6 @@
 <script lang="ts">
 	import DirTree from '$lib/DirTree.svelte';
-
+	import { v4 as uuidv4 } from 'uuid';
 	import { removeNumber } from '$lib/utils';
 	import type { Directory, Video } from '$lib/types';
 	import { onMount } from 'svelte';
@@ -38,6 +38,7 @@
 	function addDirectory() {
 		if (currentDir && newDirName.trim()) {
 			rootDirectory.subDirectories.push({
+				uuid: uuidv4(),
 				name: newDirName,
 				subDirectories: [],
 				videoIds: []
