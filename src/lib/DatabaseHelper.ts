@@ -5,8 +5,9 @@ import { v4 as uuidv4 } from 'uuid';
 
 export async function saveData(pDb: Database, pDataString: string) {
 	const insertDirectoryPromise = new Promise<void>((resolve, reject) => {
-		const query = 'INSERT INTO directories (tree) VALUES (?)';
-		pDb.run(query, pDataString, (err: Error | null) => {
+		const query = 'INSERT INTO directories (tree, modifiedDate) VALUES (?, ?)';
+		const modifiedDate = new Date().toISOString();
+		pDb.run(query, [pDataString, modifiedDate], (err: Error | null) => {
 			if (err) {
 				reject(err);
 				return;
