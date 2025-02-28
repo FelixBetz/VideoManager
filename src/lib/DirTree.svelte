@@ -48,7 +48,7 @@
 	{/if}
 </div>
 {#if expanded}
-	<ul transition:slide={{ duration: 300 }}>
+	<ul transition:slide={{ duration: 300 }} class="tree-item">
 		{#each directory.subDirectories as subdir}
 			<li>
 				<DirTree
@@ -79,14 +79,14 @@
 		background-image: url(folder-open.svg);
 	}
 
-	ul {
+	.tree-item {
 		padding: 0.2em 0 0 0.5em;
 		margin: 0 0 0 0.5em;
 		list-style: none;
 		border-left: 1px solid #ff3e00;
 	}
 
-	li {
+	.tree-item > li {
 		padding: 0.2em 0;
 	}
 
