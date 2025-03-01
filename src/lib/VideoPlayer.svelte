@@ -1,5 +1,6 @@
 <script lang="ts">
-	let { src = '' } = $props();
+	import { type Video } from '$lib/types';
+	let { video = null }: { video: Video | null } = $props();
 	let videoElement: HTMLVideoElement | undefined = $state();
 	let previewCanvas: HTMLCanvasElement | undefined = $state();
 	let previewContext: CanvasRenderingContext2D | null = $derived(
@@ -57,37 +58,44 @@
 	}
 </script>
 
-<div class="video-container">
-	<video
-		bind:this={videoElement}
-		width="640"
-		height="480"
-		controls
-		onmousemove={handleMouseMove}
-		onmouseleave={handleMouseLeave}
-		onmouseenter={handleMouseEnter}
-		onkeydown={handleKeyDown}
-	>
-		<source {src} type="video/mp4" />
-		<track kind="captions" src="captions.vtt" srclang="en" label="English" />
-		Your browser does not support the video tag.
-	</video>
-	<div class="progress">
-		<canvas class="preview" bind:this={previewCanvas} width="160" height="90"></canvas>
-	</div>
-	<video bind:this={offscreenVideoElement} style="display: none;">
-		<source {src} type="video/mp4" />
-		<track kind="captions" src="captions.vtt" srclang="en" label="English" />
-	</video>
+<div class="video-wrapper flex flex-col items-center rounded-lg bg-gray-100 p-4 shadow-lg">
+	{#if video}
+		<h2 class="mb-4 text-2xl font-bold">{video.title}</h2>
+		<div class="video-container relative">
+			<video
+				bind:this={videoElement}
+				width="640"
+				height="480"
+				controls
+				onmousemove={handleMouseMove}
+				onmouseleave={handleMouseLeave}
+				onmouseenter={handleMouseEnter}
+				onkeydown={handleKeyDown}
+				class="rounded-lg shadow-md"
+			>
+				<source src={video.videoPath} type="video/mp4" />
+				<track kind="captions" src="captions.vtt" srclang="en" label="English" />
+				Your browser does not support the video tag.
+			</video>
+			<div class="progress">
+				<canvas
+					class="preview absolute z-50 hidden"
+					bind:this={previewCanvas}
+					width="160"
+					height="90"
+				></canvas>
+			</div>
+			<video bind:this={offscreenVideoElement} class="hidden">
+				<source src={video.videoPath} type="video/mp4" />
+				<track kind="captions" src="captions.vtt" srclang="en" label="English" />
+			</video>
+		</div>
+		<div class="video-info mt-4 text-center">
+			<p class="text-sm text-gray-600">
+				Original: <a href={video.orginalUrl} target="_blank" class="text-blue-500 underline"
+					>{video.orginalTitle}</a
+				>
+			</p>
+		</div>
+	{/if}
 </div>
-
-<style>
-	.preview {
-		position: absolute;
-		display: none;
-		z-index: 1000; /* Ensure the preview is always on top */
-	}
-	.progress:hover .preview {
-		display: block;
-	}
-</style>
