@@ -59,7 +59,12 @@ async function createGif(
 	});
 }
 
-async function createVtt(pVideoFilePath: string, pVttName: string, pDirPath: string) {
+async function createVtt(
+	pVideoFilePath: string,
+	pVttName: string,
+	pDirAbsPath: string,
+	pDirRelPath: string
+) {
 	const v = new Vtt();
 
 	const duration = (await getVideoDuration(pVideoFilePath)) as number;
@@ -70,17 +75,17 @@ async function createVtt(pVideoFilePath: string, pVttName: string, pDirPath: str
 				.screenshots({
 					timestamps: [`00:00:${i.toString().padStart(2, '0')}`], // Capture at every second
 					filename: filename,
-					folder: pDirPath,
+					folder: pDirAbsPath,
 					size: '320x180'
 				})
 				.on('end', resolve)
 				.on('error', reject);
 		});
 
-		v.add(i, i + 1, filename + '#xywh=0,0,320,180');
+		v.add(i, i + 1, path.join(pDirRelPath, filename) + '#xywh=0,0,320,180');
 	}
-
-	await fs.writeFile(path.join(pDirPath, pVttName), v.toString());
+	pDirRelPath;
+	await fs.writeFile(path.join(pDirAbsPath, pVttName), v.toString());
 }
 
 export const actions = {
@@ -119,7 +124,7 @@ export const actions = {
 
 		createThumbnail(videoFileAbsPath, thumbnailName, videoDirAbsPath);
 		createGif(videoFileAbsPath, gifName, videoDirAbsPath, duration);
-		createVtt(videoFileAbsPath, vttFileName, vttDirAbsPath);
+		createVtt(videoFileAbsPath, vttFileName, vttDirAbsPath, vttDirRelPath);
 
 		const video: Video = {
 			id: -1, // will be created when inserting into database
