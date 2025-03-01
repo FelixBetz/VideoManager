@@ -1,5 +1,6 @@
 import type { Handle } from '@sveltejs/kit';
 import sqlite3 from 'sqlite3';
+import { directoryDbOj, videoDbOj } from '$lib/DatabaseUtils';
 
 export const handle: Handle = async ({ event, resolve }) => {
 	if (!event.locals.db) {
@@ -13,33 +14,14 @@ export const handle: Handle = async ({ event, resolve }) => {
 		// Set the db as our events.db variable.
 		event.locals.db = db;
 
-		// Create a table for videos
-		const videoQuery = `
-			CREATE TABLE IF NOT EXISTS videos (
-				id INTEGER PRIMARY KEY AUTOINCREMENT,
-				title TEXT,
-				videoPath TEXT,
-				thumbnailImg TEXT,
-				thumbnailGif TEXT,
-				orginalTitle TEXT,
-				orginalUrl TEXT,
-				durationSec INTEGER
-			)`;
-		db.run(videoQuery, (err) => {
+		db.run(videoDbOj.getCreateQuery(), (err) => {
 			if (err) {
 				throw err;
 			}
 		});
 
 		// Create a table for directories
-		const directoryQuery = `
-			CREATE TABLE IF NOT EXISTS directories (
-				id INTEGER PRIMARY KEY AUTOINCREMENT,
-				tree TEXT,
-				modifiedDate TEXT
-			)`;
-
-		db.run(directoryQuery, (err) => {
+		db.run(directoryDbOj.getCreateQuery(), (err) => {
 			if (err) {
 				throw err;
 			}

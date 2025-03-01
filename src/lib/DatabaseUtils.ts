@@ -1,12 +1,32 @@
-import type { DbDirectoryTree, Directory, Video } from '$lib/types';
+import { DatabaseObject, type DbDirectoryTree, type Directory, type Video } from '$lib/types';
 import type { Database } from 'sqlite3';
 
 import { v4 as uuidv4 } from 'uuid';
 
+export const videoDbOj = new DatabaseObject('videos', [
+	{ name: 'id', type: 'INTEGER PRIMARY KEY AUTOINCREMENT' },
+	{ name: 'uuid', type: 'TEXT' },
+	{ name: 'title', type: 'TEXT' },
+	{ name: 'videoPath', type: 'TEXT' },
+	{ name: 'thumbnailImg', type: 'TEXT' },
+	{ name: 'thumbnailGif', type: 'TEXT' },
+	{ name: 'vttPath', type: 'TEXT' },
+	{ name: 'orginalTitle', type: 'TEXT' },
+	{ name: 'orginalUrl', type: 'TEXT' },
+	{ name: 'durationSec', type: 'TEXT' },
+	{ name: 'createdDate', type: 'TEXT' }
+]);
+
+export const directoryDbOj = new DatabaseObject('directories', [
+	{ name: 'id', type: 'INTEGER PRIMARY KEY AUTOINCREMENT' },
+	{ name: 'tree', type: 'TEXT' },
+	{ name: 'modifiedDate', type: 'TEXT' }
+]);
+
 export async function saveData(pDb: Database, pDataString: string) {
 	const insertDirectoryPromise = new Promise<void>((resolve, reject) => {
 		const query = 'INSERT INTO directories (tree, modifiedDate) VALUES (?, ?)';
-		const modifiedDate = new Date().toISOString();
+		const modifiedDate = new Date();
 		pDb.run(query, [pDataString, modifiedDate], (err: Error | null) => {
 			if (err) {
 				reject(err);
@@ -78,4 +98,18 @@ export function isVideoIdInDiretory(pDirectory: Directory, pVideoId: number): bo
 		}
 	}
 	return false;
+}
+
+export async function addVideo(pDb: Database, pVideo: Video) {
+	const insertVideoPromise = new Promise<void>((resolve, reject) => {
+		pDb.run(videoDbOj.getInsertQuery(), videoDbOj.mapInsertValues(pVideo), (err: Error | null) => {
+			if (err) {
+				reject(err);
+				return;
+			}
+			resolve();
+		});
+	});
+
+	await insertVideoPromise;
 }

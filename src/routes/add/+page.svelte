@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { type Video } from '$lib/types';
+	import { defaultVideo, type Video } from '$lib/types';
 
 	function resetFields() {
 		video.title = 'test_video.mp4';
@@ -9,17 +9,7 @@
 		video.orginalUrl = 'dummy';
 	}
 
-	let video: Video = $state({
-		id: -1,
-		title: '',
-		videoPath: '',
-		thumbnailImg: '',
-		thumbnailGif: '',
-		orginalTitle: '',
-		orginalUrl: '',
-		durationSec: 0,
-		tags: []
-	});
+	let video: Video = $state(defaultVideo());
 
 	onMount(() => {
 		resetFields();
