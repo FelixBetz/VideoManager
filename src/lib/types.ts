@@ -48,3 +48,21 @@ export function findAndMoveDirectory(
 	}
 	return false;
 }
+
+export function findAndDeleteDirectory(
+	rootDirectory: Directory,
+	toDeleteDirectory: Directory
+): boolean {
+	for (let i = 0; i < rootDirectory.subDirectories.length; i++) {
+		if (rootDirectory.subDirectories[i].uuid === toDeleteDirectory.uuid) {
+			const [deletedDirectory] = rootDirectory.subDirectories.splice(i, 1);
+			// Add subdirectories of the deleted directory to the root directory
+			rootDirectory.subDirectories.push(...deletedDirectory.subDirectories);
+			rootDirectory.videoIds.push(...deletedDirectory.videoIds);
+			return true;
+		} else if (findAndDeleteDirectory(rootDirectory.subDirectories[i], toDeleteDirectory)) {
+			return true;
+		}
+	}
+	return false;
+}

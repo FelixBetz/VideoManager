@@ -2,7 +2,13 @@
 	import DirTree from '$lib/DirTree.svelte';
 	import { v4 as uuidv4 } from 'uuid';
 	import { formatDuration, removeNumber } from '$lib/utils';
-	import { type Directory, type Video, isSubDirectory, findAndMoveDirectory } from '$lib/types';
+	import {
+		type Directory,
+		type Video,
+		isSubDirectory,
+		findAndMoveDirectory,
+		findAndDeleteDirectory
+	} from '$lib/types';
 	import { onMount } from 'svelte';
 
 	let { data } = $props();
@@ -88,6 +94,10 @@
 	function onDragOver(event: DragEvent) {
 		event.preventDefault();
 	}
+
+	function delteDirectory(pDiretory: Directory) {
+		findAndDeleteDirectory(rootDirectory, pDiretory);
+	}
 </script>
 
 <div class=" flex">
@@ -100,6 +110,7 @@
 			{onDrop}
 			{onDragOver}
 			onDragStart={onDragStartDirectory}
+			onDelete={delteDirectory}
 		/>
 		<div class="mt-2 flex items-center">
 			<input

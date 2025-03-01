@@ -16,7 +16,8 @@
 		selectDirectory,
 		onDrop,
 		onDragOver,
-		onDragStart
+		onDragStart,
+		onDelete
 	}: {
 		selectDirectory: (pDirectroy: Directory) => void;
 		directory: Directory;
@@ -24,12 +25,64 @@
 		onDrop: (event: DragEvent, pDirectory: Directory) => void;
 		onDragOver: (event: DragEvent) => void;
 		onDragStart: (event: DragEvent, pDirectory: Directory) => void;
+		onDelete: (pDirectory: Directory) => void;
 	} = $props();
 
 	function toggle() {
 		expanded = !expanded;
 	}
+
+	function onConextMenu(event: MouseEvent) {
+		event.preventDefault();
+		menuX = event.clientX;
+		menuY = event.clientY;
+		showMenu = true;
+	}
+
+	let showMenu = $state(false);
+	let menuX = $state(0);
+	let menuY = $state(0);
 </script>
+
+<svelte:window onclick={() => (showMenu = false)} />
+{#if showMenu}
+	<div
+		class="context-menu fixed z-50 rounded-md border border-gray-300 bg-white p-2 shadow-lg"
+		style="top: {menuY}px; left: {menuX + 10}px;"
+	>
+		<ul>
+			<li>
+				<button
+					class="menu-item flex w-full cursor-pointer items-center px-4 py-2 text-red-600 hover:bg-gray-100"
+					onclick={() => onDelete(directory)}
+				>
+					<svg
+						class="mr-2 h-4 w-4"
+						fill="none"
+						stroke="currentColor"
+						viewBox="0 0 24 24"
+						xmlns="http://www.w3.org/2000/svg"
+					>
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M3 6h18M9 6v12m6-12v12M4 6l1 14a2 2 0 002 2h10a2 2 0 002-2l1-14"
+						></path>
+					</svg>
+					Delete
+				</button>
+			</li>
+			<li>
+				<button
+					class="menu-item flex w-full cursor-pointer items-center px-4 py-2 hover:bg-gray-100"
+				>
+					Rename
+				</button>
+			</li>
+		</ul>
+	</div>
+{/if}
 
 <div
 	class:selected={directory === currentDir}
@@ -38,6 +91,7 @@
 	ondragstart={(event) => onDragStart(event, directory)}
 	role="director {directory.name}"
 	draggable="true"
+	oncontextmenu={onConextMenu}
 >
 	<button class:expanded class="dir-button" onclick={() => selectDirectory(directory)}
 		>{directory.name}
@@ -58,6 +112,7 @@
 					{onDragOver}
 					{onDrop}
 					{onDragStart}
+					{onDelete}
 				/>
 			</li>
 		{/each}
