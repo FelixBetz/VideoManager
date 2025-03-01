@@ -9,7 +9,6 @@
 		//https://github.com/sampotts/plyr/tree/master#preview-thumbnails
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		const player = new Plyr('#player', {
-			// Disable
 			enabled: true,
 
 			// Logging to console
