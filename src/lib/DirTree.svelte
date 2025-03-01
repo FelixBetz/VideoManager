@@ -42,6 +42,19 @@
 	let showMenu = $state(false);
 	let menuX = $state(0);
 	let menuY = $state(0);
+
+	let showRenameModal = $state(false);
+	let newDirectoryName = $state('');
+
+	function openRenameDialog() {
+		showRenameModal = true;
+		newDirectoryName = directory.name;
+	}
+
+	function renameDirectory() {
+		directory.name = newDirectoryName;
+		showRenameModal = false;
+	}
 </script>
 
 <svelte:window onclick={() => (showMenu = false)} />
@@ -76,11 +89,32 @@
 			<li>
 				<button
 					class="menu-item flex w-full cursor-pointer items-center px-4 py-2 hover:bg-gray-100"
+					onclick={openRenameDialog}
 				>
 					Rename
 				</button>
 			</li>
 		</ul>
+	</div>
+{/if}
+
+{#if showRenameModal}
+	<div class="modal-overlay bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center">
+		<div class="modal rounded bg-white p-4 shadow-lg">
+			<h2 class="mb-4 text-lg font-bold">Rename Directory</h2>
+			<input
+				type="text"
+				class="mb-4 w-full border p-2"
+				bind:value={newDirectoryName}
+				placeholder="Enter new name"
+			/>
+			<div class="flex justify-end">
+				<button class="mr-2 bg-gray-300 px-4 py-2" onclick={() => (showRenameModal = false)}
+					>Cancel</button
+				>
+				<button class="bg-blue-500 px-4 py-2 text-white" onclick={renameDirectory}>Rename</button>
+			</div>
+		</div>
 	</div>
 {/if}
 
@@ -148,5 +182,13 @@
 	.selected {
 		font-weight: bold;
 		background-color: #e0e0e0;
+	}
+
+	.modal-overlay {
+		z-index: 1000;
+		background-color: rgba(0, 0, 0, 0.8);
+	}
+	.modal {
+		width: 300px;
 	}
 </style>
