@@ -84,7 +84,6 @@ async function createVtt(
 
 		v.add(i, i + 1, path.join(pDirRelPath, filename) + '#xywh=0,0,320,180');
 	}
-	pDirRelPath;
 	await fs.writeFile(path.join(pDirAbsPath, pVttName), v.toString());
 }
 
