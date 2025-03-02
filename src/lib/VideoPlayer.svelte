@@ -3,6 +3,8 @@
 	import { onMount } from 'svelte';
 	let { video }: { video: Video } = $props();
 
+	let videoElement: HTMLVideoElement | undefined = $state();
+
 	onMount(async () => {
 		const Plyr = (await import('plyr')).default;
 
@@ -60,7 +62,7 @@
 			// Keyboard shortcut settings
 			keyboard: {
 				focused: true,
-				global: true
+				global: false
 			},
 
 			// Display tooltips
@@ -121,22 +123,30 @@
 				src: [video?.vttPath]
 			}
 		});
+		if (videoElement) {
+			videoElement.focus();
+		}
 	});
 </script>
 
-<div class="video-wrapper flex flex-col items-center rounded-lg bg-gray-100 p-4 shadow-lg">
+<div class="video-wrapper 100 flex flex-col items-center p-4">
 	{#if video}
 		<h2 class="mb-4 text-2xl font-bold">{video.title}</h2>
-		<div class="video-container relative rounded-lg" style="width: 640px; height: 480px">
-			<video id="player" controls data-poster={video.thumbnailImg}>
+		<div class=" relative" style="width: 640px;">
+			<video id="player" controls data-poster={video.thumbnailImg} bind:this={videoElement}>
 				<source src={video.videoPath} type="video/mp4" />
 				<track kind="captions" label="English captions" srclang="en" default />
 			</video>
 		</div>
 		<div class="video-info mt-4 text-center">
-			<p>{video.createdDate}</p>
 			<p class="text-sm text-gray-600">
-				Original: <a href={video.orginalUrl} target="_blank" class="text-blue-500 underline"
+				Added:
+				{video.createdDate.toLocaleDateString('de-DE', {
+					day: '2-digit',
+					month: '2-digit',
+					year: 'numeric'
+				})} | Original:
+				<a href={video.orginalUrl} target="_blank" class="text-blue-500 underline"
 					>{video.orginalTitle}</a
 				>
 			</p>
