@@ -38,6 +38,25 @@ export async function saveData(pDb: Database, pDataString: string) {
 	await insertDirectoryPromise;
 }
 
+export async function getVideo(pDb: Database, pId: number) {
+	const loadVideoPromise = new Promise<Video>((resolve, reject) => {
+		const query = 'SELECT * FROM videos WHERE id = ? LIMIT 1';
+		pDb.get<Video>(query, [pId], (err: Error | null, row: Video) => {
+			if (err) {
+				reject(err);
+				return;
+			}
+
+			resolve(row);
+		});
+	});
+
+	const video: Video = await loadVideoPromise;
+
+	video.createdDate = new Date(parseInt(video.createdDate.toString()));
+	return video;
+}
+
 export async function parseData(pDb: Database) {
 	//load videos from database
 	const loadVideoDataPromise = new Promise<Video[]>((resolve, reject) => {
@@ -80,6 +99,8 @@ export async function parseData(pDb: Database) {
 
 	//add videos to directories
 	videos.forEach((video) => {
+		video.createdDate = new Date(parseInt(video.createdDate.toString()));
+
 		if (!isVideoIdInDiretory(rootDirectory, video.id)) {
 			rootDirectory.videoIds.push(video.id);
 		}
