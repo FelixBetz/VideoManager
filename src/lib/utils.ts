@@ -6,3 +6,6 @@ export function formatDuration(seconds: number): string {
 	const remainingSeconds = seconds % 60;
 	return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
 }
+export function removeFileExtension(filePath: string): string {
+	return filePath.replace(/\.[^/.]+$/, ''); // Removes the last extension
+}
