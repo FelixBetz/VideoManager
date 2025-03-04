@@ -63,6 +63,7 @@
 						id="videoPreview"
 						oncanplay={(e) => {
 							const videoElement = e.target as HTMLVideoElement;
+							videoElement.playbackRate = 5.0;
 							videoElement.muted = true;
 							videoElement.play();
 						}}
@@ -104,7 +105,7 @@
 				class="mt-2 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
 			/>
 		</div>
-		<div>
+		<div class="col-span-2 sm:col-span-1">
 			<label for="orginalUrl" class="block text-sm font-medium text-gray-700">Original URL:</label>
 			<input
 				type="text"
