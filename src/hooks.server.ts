@@ -7,7 +7,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		// This will create the database within the `db.sqlite` file.
 		const db = new sqlite3.Database('db.sqlite', (err) => {
 			if (err) {
-				throw err;
+				console.log(err);
 			}
 		});
 
@@ -16,14 +16,14 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 		db.run(videoDbOj.getCreateQuery(), (err) => {
 			if (err) {
-				throw err;
+				console.log(err);
 			}
 		});
 
 		// Create a table for directories
 		db.run(directoryDbOj.getCreateQuery(), (err) => {
 			if (err) {
-				throw err;
+				console.log(err);
 			}
 		});
 	}

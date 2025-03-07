@@ -10,6 +10,7 @@ export interface Video {
 	orginalUrl: string;
 	durationSec: number;
 	createdDate: Date;
+	tags: string[];
 }
 
 export function defaultVideo(): Video {
@@ -24,7 +25,8 @@ export function defaultVideo(): Video {
 		orginalTitle: '',
 		orginalUrl: '',
 		durationSec: 0,
-		createdDate: new Date()
+		createdDate: new Date(),
+		tags: []
 	};
 }
 
@@ -44,6 +46,8 @@ export interface DbDirectoryTree {
 export interface DatabaseCol {
 	name: string;
 	type: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	mapCb: null | ((x: any) => string);
 }
 
 export class DatabaseObject {
@@ -76,7 +80,11 @@ export class DatabaseObject {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		const retArr: any[] = [];
 		arr.forEach((key) => {
-			retArr.push(obj[key.name]);
+			if (key.mapCb != null) {
+				retArr.push(key.mapCb(obj[key.name]));
+			} else {
+				retArr.push(obj[key.name]);
+			}
 		});
 
 		return retArr;

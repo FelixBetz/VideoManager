@@ -5,13 +5,32 @@
 
 	function resetFields() {
 		video.title = '';
-
 		video.orginalTitle = '';
 		video.orginalUrl = '';
+		video.tags = [];
 	}
 
 	let video: Video = $state(defaultVideo());
 	let videoPreviewUrl: string | null = $state(null);
+	let newTag: string = $state('');
+
+	function addTag() {
+		if (newTag.trim() !== '') {
+			video.tags.push(newTag.trim());
+			newTag = '';
+		}
+	}
+
+	function removeTag(index: number) {
+		video.tags.splice(index, 1);
+	}
+
+	function handleTagInputKeydown(event: KeyboardEvent) {
+		if (event.key === 'Enter') {
+			event.preventDefault();
+			addTag();
+		}
+	}
 
 	onMount(() => {
 		resetFields();
@@ -65,18 +84,13 @@
 							const videoElement = e.target as HTMLVideoElement;
 							videoElement.playbackRate = 5.0;
 							videoElement.muted = true;
+							videoElement.disablePictureInPicture = true;
 							videoElement.play();
 						}}
 						class="mt-2 w-full max-w-xs rounded-md border border-gray-300"
 						src={videoPreviewUrl}
 					>
-						<track
-							kind="captions"
-							src="captions.vtt"
-							srclang="en"
-							label="English captions"
-							default
-						/>
+						<track kind="captions" default />
 					</video>
 				</div>
 			{/if}
@@ -116,8 +130,44 @@
 				class="mt-2 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
 			/>
 		</div>
+		<div class="col-span-2 sm:col-span-1">
+			<label for="tag" class="block text-sm font-medium text-gray-700">Tags:</label>
+			<div class="mt-2 flex items-center">
+				<input
+					type="text"
+					id="tag"
+					name="tag"
+					bind:value={newTag}
+					onkeydown={handleTagInputKeydown}
+					class="block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+				/>
+				<button
+					type="button"
+					onclick={addTag}
+					class="ml-2 inline-flex h-10 w-24 justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none"
+				>
+					Add Tag
+				</button>
+			</div>
+			<div class="mt-2 flex flex-wrap">
+				{#each video.tags as tag, index}
+					<span
+						class="mr-2 mb-2 inline-flex items-center rounded-full bg-gray-200 px-3 py-1 text-sm font-medium text-gray-700"
+					>
+						{tag}
+						<button
+							type="button"
+							onclick={() => removeTag(index)}
+							class="ml-2 text-gray-500 hover:text-gray-700"
+						>
+							&times;
+						</button>
+					</span>
+				{/each}
+			</div>
+		</div>
 	</div>
-
+	<input type="hidden" name="tags" value={JSON.stringify(video.tags)} />
 	<button
 		type="submit"
 		class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none"

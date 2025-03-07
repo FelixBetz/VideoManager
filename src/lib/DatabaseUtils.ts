@@ -3,24 +3,29 @@ import type { Database } from 'sqlite3';
 
 import { v4 as uuidv4 } from 'uuid';
 
+function joinArray(arr: string[]): string {
+	return arr.join(',');
+}
+
 export const videoDbOj = new DatabaseObject('videos', [
-	{ name: 'id', type: 'INTEGER PRIMARY KEY AUTOINCREMENT' },
-	{ name: 'uuid', type: 'TEXT' },
-	{ name: 'title', type: 'TEXT' },
-	{ name: 'videoPath', type: 'TEXT' },
-	{ name: 'thumbnailImg', type: 'TEXT' },
-	{ name: 'thumbnailGif', type: 'TEXT' },
-	{ name: 'vttPath', type: 'TEXT' },
-	{ name: 'orginalTitle', type: 'TEXT' },
-	{ name: 'orginalUrl', type: 'TEXT' },
-	{ name: 'durationSec', type: 'TEXT' },
-	{ name: 'createdDate', type: 'TEXT' }
+	{ name: 'id', type: 'INTEGER PRIMARY KEY AUTOINCREMENT', mapCb: null },
+	{ name: 'uuid', type: 'TEXT', mapCb: null },
+	{ name: 'title', type: 'TEXT', mapCb: null },
+	{ name: 'videoPath', type: 'TEXT', mapCb: null },
+	{ name: 'thumbnailImg', type: 'TEXT', mapCb: null },
+	{ name: 'thumbnailGif', type: 'TEXT', mapCb: null },
+	{ name: 'vttPath', type: 'TEXT', mapCb: null },
+	{ name: 'orginalTitle', type: 'TEXT', mapCb: null },
+	{ name: 'orginalUrl', type: 'TEXT', mapCb: null },
+	{ name: 'durationSec', type: 'TEXT', mapCb: null },
+	{ name: 'createdDate', type: 'TEXT', mapCb: null },
+	{ name: 'tags', type: 'TEXT', mapCb: joinArray }
 ]);
 
 export const directoryDbOj = new DatabaseObject('directories', [
-	{ name: 'id', type: 'INTEGER PRIMARY KEY AUTOINCREMENT' },
-	{ name: 'tree', type: 'TEXT' },
-	{ name: 'modifiedDate', type: 'TEXT' }
+	{ name: 'id', type: 'INTEGER PRIMARY KEY AUTOINCREMENT', mapCb: null },
+	{ name: 'tree', type: 'TEXT', mapCb: null },
+	{ name: 'modifiedDate', type: 'TEXT', mapCb: null }
 ]);
 
 export async function saveData(pDb: Database, pDataString: string) {
@@ -54,6 +59,9 @@ export async function getVideo(pDb: Database, pId: number) {
 	const video: Video = await loadVideoPromise;
 
 	video.createdDate = new Date(parseInt(video.createdDate.toString()));
+	if (typeof video.tags === 'string') {
+		video.tags = (video.tags as string).split(',');
+	}
 	return video;
 }
 

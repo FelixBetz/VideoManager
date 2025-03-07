@@ -65,24 +65,33 @@ async function createVtt(
 	pDirAbsPath: string,
 	pDirRelPath: string
 ) {
+	const WIDTH = 160;
+	const HEIGHT = 90;
+
+	const QUALITY = 50; // WebP quality (0-100)
+
 	const v = new Vtt();
 
 	const duration = (await getVideoDuration(pVideoFilePath)) as number;
-	for (let i = 0; i <= Math.floor(duration); i++) {
-		const filename = `${path.parse(pVttName).name}_${i.toString()}.jpg`;
+	const STEP = 3;
+	let cntImages = 0;
+	for (let i = 0; i <= Math.floor(duration); i += STEP) {
+		const filename = `${path.parse(pVttName).name}_${cntImages.toString()}.webp`;
+		cntImages++;
 		await new Promise((resolve, reject) => {
 			ffmpeg(pVideoFilePath)
 				.screenshots({
 					timestamps: [`00:00:${i.toString().padStart(2, '0')}`], // Capture at every second
 					filename: filename,
 					folder: pDirAbsPath,
-					size: '320x180'
+					size: WIDTH + 'x' + HEIGHT
 				})
+				.outputOptions([`-q:v ${QUALITY}`])
 				.on('end', resolve)
 				.on('error', reject);
 		});
 
-		v.add(i, i + 1, path.join(pDirRelPath, filename) + '#xywh=0,0,320,180');
+		v.add(i, i + STEP, path.join(pDirRelPath, filename) + '#xywh=0,0,' + WIDTH + ',' + HEIGHT);
 	}
 	await fs.writeFile(path.join(pDirAbsPath, pVttName), v.toString());
 }
@@ -136,7 +145,8 @@ export const actions = {
 			orginalTitle: (data.get('orginalTitle') as string) || '',
 			orginalUrl: (data.get('orginalUrl') as string) || '',
 			durationSec: Math.floor(duration),
-			createdDate: new Date()
+			createdDate: new Date(),
+			tags: JSON.parse((data.get('tags') as string) || '[]')
 		};
 
 		await addVideo(locals.db, video);
