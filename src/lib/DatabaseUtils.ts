@@ -1,7 +1,9 @@
-import { DatabaseObject, type DbDirectoryTree, type Directory, type Video } from '$lib/types';
+import { type DbDirectoryTree, type Directory, type Video } from '$lib/types';
 import type { Database } from 'sqlite3';
 
 import { v4 as uuidv4 } from 'uuid';
+import { DatabaseObject } from './DatabaseObject';
+
 
 function joinArray(arr: string[]): string {
 	return '"' + arr.join(',') + '"';
