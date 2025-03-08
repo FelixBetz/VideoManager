@@ -111,7 +111,7 @@
 
 								<button
 									type="button"
-									class="rounded-md border border-gray-300 px-3 py-1 text-gray-500 hover:text-gray-700 focus:outline-none"
+									class="ml-2 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 p-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none"
 									onclick={() => editTags.push('')}
 								>
 									Add Tag

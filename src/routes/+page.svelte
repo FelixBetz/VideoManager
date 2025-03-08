@@ -228,7 +228,7 @@
 							ondragstart={(event) => onDragStartVideo(event, video)}
 							role="video {video.title}"
 						>
-							<a href={`/video/${video.id}`} target="_blank" rel="noopener noreferrer">
+							<a href={`/video/${video.id}`}>
 								<div class="video-card overflow-hidden rounded-lg bg-white shadow-md">
 									<div class="video-body relative">
 										<img
