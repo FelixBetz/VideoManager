@@ -62,19 +62,35 @@ export class DatabaseObject {
 		const colStr = this.cols.map((col) => `${col.name} ${col.type}`).join(', ');
 		return `CREATE TABLE IF NOT EXISTS ${this.tableName}(${colStr}) `;
 	}
-
-	getInsertQuery(): string {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	getInsertQuery(obj: Record<string, any>): string {
 		//skip 1st col (id col)
 		const arr = this.cols.slice(1);
 
-		const valuesStr = arr.map((col) => col.name).join(', ');
-		const questionMarks = arr.map(() => '?').join(', ');
+		const colsStr = arr.map((col) => col.name).join(', ');
 
-		return `INSERT INTO ${this.tableName} (${valuesStr}) VALUES (${questionMarks}) `;
+		let queryString = `INSERT INTO ${this.tableName} (${colsStr})`;
+		queryString += ' VALUES (' + this.mapValues(obj).join(',') + ')';
+
+		return queryString;
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	mapInsertValues(obj: Record<string, any>): any[] {
+	getUpdateQuery(obj: Record<string, any>): string {
+		//skip 1st col (id col)
+		const arr = this.cols.slice(1);
+		const values = this.mapValues(obj);
+
+		const cols = [];
+		for (let i = 0; i < arr.length; i++) {
+			cols.push(arr[i].name + ' = ' + values[i]);
+		}
+
+		return `UPDATE ${this.tableName} SET ${cols.join(', ')} WHERE id = ${obj.id} `;
+	}
+
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	private mapValues(obj: Record<string, any>): any[] {
 		const arr = this.cols.slice(1);
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -83,7 +99,11 @@ export class DatabaseObject {
 			if (key.mapCb != null) {
 				retArr.push(key.mapCb(obj[key.name]));
 			} else {
-				retArr.push(obj[key.name]);
+				if (typeof obj[key.name] == 'string') {
+					retArr.push('"' + obj[key.name] + '"');
+				} else {
+					retArr.push(obj[key.name].toString());
+				}
 			}
 		});
 

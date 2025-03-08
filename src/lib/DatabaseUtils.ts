@@ -4,7 +4,13 @@ import type { Database } from 'sqlite3';
 import { v4 as uuidv4 } from 'uuid';
 
 function joinArray(arr: string[]): string {
-	return arr.join(',');
+	return '"' + arr.join(',') + '"';
+}
+
+function dateToString(pDate: string) {
+	const timestamp = Date.parse(pDate.toString());
+
+	return timestamp.toString();
 }
 
 export const videoDbOj = new DatabaseObject('videos', [
@@ -18,7 +24,7 @@ export const videoDbOj = new DatabaseObject('videos', [
 	{ name: 'orginalTitle', type: 'TEXT', mapCb: null },
 	{ name: 'orginalUrl', type: 'TEXT', mapCb: null },
 	{ name: 'durationSec', type: 'TEXT', mapCb: null },
-	{ name: 'createdDate', type: 'TEXT', mapCb: null },
+	{ name: 'createdDate', type: 'TEXT', mapCb: dateToString },
 	{ name: 'tags', type: 'TEXT', mapCb: joinArray }
 ]);
 
@@ -131,7 +137,7 @@ export function isVideoIdInDiretory(pDirectory: Directory, pVideoId: number): bo
 
 export async function addVideo(pDb: Database, pVideo: Video) {
 	const insertVideoPromise = new Promise<void>((resolve, reject) => {
-		pDb.run(videoDbOj.getInsertQuery(), videoDbOj.mapInsertValues(pVideo), (err: Error | null) => {
+		pDb.run(videoDbOj.getInsertQuery(pVideo), [], (err: Error | null) => {
 			if (err) {
 				reject(err);
 				return;
@@ -141,4 +147,20 @@ export async function addVideo(pDb: Database, pVideo: Video) {
 	});
 
 	await insertVideoPromise;
+}
+
+export async function updateVideo(pDb: Database, pVideo: Video) {
+	const queryStr = videoDbOj.getUpdateQuery(pVideo);
+
+	const updateVideoPromise = new Promise<void>((resolve, reject) => {
+		pDb.run(queryStr, [], (err: Error | null) => {
+			if (err) {
+				reject(err);
+				return;
+			}
+			resolve();
+		});
+	});
+
+	await updateVideoPromise;
 }

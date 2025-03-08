@@ -129,27 +129,9 @@
 	});
 </script>
 
-<div class="video-wrapper 100 flex flex-col items-center p-4">
-	{#if video}
-		<h2 class="mb-4 text-2xl font-bold">{video.title}</h2>
-		<div class=" relative" style="width: 640px;">
-			<video id="player" controls data-poster={video.thumbnailImg} bind:this={videoElement}>
-				<source src={video.videoPath} type="video/mp4" />
-				<track kind="captions" label="English captions" srclang="en" default />
-			</video>
-		</div>
-		<div class="video-info mt-4 text-center">
-			<p class="text-sm text-gray-600">
-				Added:
-				{video.createdDate.toLocaleDateString('de-DE', {
-					day: '2-digit',
-					month: '2-digit',
-					year: 'numeric'
-				})} | Original:
-				<a href={video.orginalUrl} target="_blank" class="text-blue-500 underline"
-					>{video.orginalTitle}</a
-				>
-			</p>
-		</div>
-	{/if}
-</div>
+{#if video}
+	<video id="player" controls data-poster={video.thumbnailImg} bind:this={videoElement}>
+		<source src={video.videoPath} type="video/mp4" />
+		<track kind="captions" label="English captions" srclang="en" default />
+	</video>
+{/if}
