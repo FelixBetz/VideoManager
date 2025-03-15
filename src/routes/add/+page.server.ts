@@ -7,7 +7,7 @@ import ffmpeg from 'fluent-ffmpeg';
 import { addVideo } from '$lib/DatabaseUtils';
 import Vtt from 'vtt-creator';
 
-const VIDEOS_PATH = '/videos';
+import { VIDEO_UPLOAD_DIR } from '$env/static/private';
 
 function getVideoDuration(inputVideo: string) {
 	return new Promise((resolve, reject) => {
@@ -91,7 +91,11 @@ async function createVtt(
 				.on('error', reject);
 		});
 
-		v.add(i, i + STEP, path.join(pDirRelPath, filename) + '#xywh=0,0,' + WIDTH + ',' + HEIGHT);
+		v.add(
+			i,
+			i + STEP,
+			path.join('/api', pDirRelPath, filename) + '#xywh=0,0,' + WIDTH + ',' + HEIGHT
+		);
 	}
 	await fs.writeFile(path.join(pDirAbsPath, pVttName), v.toString());
 }
@@ -107,21 +111,24 @@ export const actions = {
 
 		const uuid = uuidv4();
 
-		const videoDirRelPath = path.join(VIDEOS_PATH, uuid);
-		const videoDirAbsPath = path.join(process.cwd(), 'static', videoDirRelPath);
+		const VIDEO_ABS_DIR = path.join(process.cwd(), VIDEO_UPLOAD_DIR);
+
+		const videoDirRelPath = path.join('videos', uuid);
+		const videoDirAbsPath = path.join(VIDEO_ABS_DIR, videoDirRelPath);
 
 		const videoFileRelPath = path.join(videoDirRelPath, videoFile.name);
-		const videoFileAbsPath = path.join(process.cwd(), 'static', videoFileRelPath);
+		const videoFileAbsPath = path.join(VIDEO_ABS_DIR, videoFileRelPath);
 
 		const thumbnailName = `${path.parse(videoFile.name).name}_thumbnail.jpg`;
 		const gifName = `${path.parse(videoFile.name).name}_thumbnail.gif`;
 
 		const vttFileName = `${path.parse(videoFile.name).name}.vtt`;
 		const vttDirRelPath = path.join(videoDirRelPath, 'vtt');
-		const vttDirAbsPath = path.join(process.cwd(), 'static', vttDirRelPath);
+		const vttDirAbsPath = path.join(VIDEO_ABS_DIR, vttDirRelPath);
 		const vttFileRelPath = path.join(vttDirRelPath, vttFileName);
 
 		//create directories
+
 		await fs.mkdir(videoDirAbsPath, { recursive: true });
 		await fs.mkdir(vttDirAbsPath, { recursive: true });
 
@@ -138,10 +145,10 @@ export const actions = {
 			id: -1, // will be created when inserting into database
 			uuid: uuid,
 			title: (data.get('title') as string) || '',
-			videoPath: videoFileRelPath,
-			thumbnailImg: path.join(videoDirRelPath, thumbnailName),
-			thumbnailGif: path.join(videoDirRelPath, gifName),
-			vttPath: vttFileRelPath,
+			videoPath: path.join('/api', videoFileRelPath),
+			thumbnailImg: path.join('/api', videoDirRelPath, thumbnailName),
+			thumbnailGif: path.join('/api', videoDirRelPath, gifName),
+			vttPath: path.join('/api', vttFileRelPath),
 			orginalTitle: (data.get('orginalTitle') as string) || '',
 			orginalUrl: (data.get('orginalUrl') as string) || '',
 			durationSec: Math.floor(duration),
