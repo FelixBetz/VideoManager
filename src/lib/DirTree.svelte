@@ -156,7 +156,7 @@
 <style>
 	.dir-button {
 		padding: 0 0 0 1.5em;
-		background: url(folder.svg) 0 0.1em no-repeat;
+		background: url(/folder.svg) 0 0.1em no-repeat;
 		background-size: 1em 1em;
 		font-weight: bold;
 		cursor: pointer;
@@ -165,7 +165,7 @@
 	}
 
 	.expanded {
-		background-image: url(folder-open.svg);
+		background-image: url(/folder-open.svg);
 	}
 
 	.tree-item {
