@@ -6,7 +6,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR" 
 cd ..
 
-PORT=8765  ORIGIN=http://pivideo:8765   pm2 start node --name video-manager -- build
+PORT=8765  ORIGIN=http://pivideo:8765  BODY_SIZE_LIMIT=Infinity  pm2 start node --name video-manager -- build
 
 
 pm2 startup
