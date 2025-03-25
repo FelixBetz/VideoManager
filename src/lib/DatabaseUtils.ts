@@ -51,25 +51,28 @@ export async function saveData(pDb: Database, pDataString: string) {
 }
 
 export async function getVideo(pDb: Database, pId: number) {
-	const loadVideoPromise = new Promise<Video>((resolve, reject) => {
-		const query = 'SELECT * FROM videos WHERE id = ? LIMIT 1';
-		pDb.get<Video>(query, [pId], (err: Error | null, row: Video) => {
+	const loadVideoPromise = new Promise<Video[]>((resolve, reject) => {
+		const query = 'SELECT * FROM videos WHERE id = ? ';
+		pDb.all<Video>(query, [pId], (err: Error | null, rows: Video[]) => {
 			if (err) {
 				reject(err);
 				return;
 			}
 
-			resolve(row);
+			resolve(rows);
 		});
 	});
 
-	const video: Video = await loadVideoPromise;
+	const videos: Video[] = await loadVideoPromise;
 
-	video.createdDate = new Date(parseInt(video.createdDate.toString()));
-	if (typeof video.tags === 'string') {
-		video.tags = (video.tags as string).split(',');
-	}
-	return video;
+	videos.forEach((video) => {
+		video.createdDate = new Date(parseInt(video.createdDate.toString()));
+		if (typeof video.tags === 'string') {
+			video.tags = (video.tags as string).split(',');
+		}
+	});
+
+	return videos[0];
 }
 
 export async function parseData(pDb: Database) {
@@ -115,6 +118,10 @@ export async function parseData(pDb: Database) {
 	//add videos to directories
 	videos.forEach((video) => {
 		video.createdDate = new Date(parseInt(video.createdDate.toString()));
+
+		if (typeof video.tags === 'string') {
+			video.tags = (video.tags as string).split(',');
+		}
 
 		if (!isVideoIdInDiretory(rootDirectory, video.id)) {
 			rootDirectory.videoIds.push(video.id);

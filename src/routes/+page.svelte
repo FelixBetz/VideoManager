@@ -222,7 +222,6 @@
 					style="grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));"
 				>
 					{#each videos as video}
-						<!-- todo ondragend={() => (dragVideoId = -1)}-->
 						<div
 							class="video-card-container"
 							ondragstart={(event) => onDragStartVideo(event, video)}

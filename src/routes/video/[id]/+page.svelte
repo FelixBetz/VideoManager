@@ -61,11 +61,13 @@
 					</li>
 					<li class="mr-1 ml-1">|</li>
 					<li class=" text-sm text-gray-600">
-						{video.createdDate.toLocaleDateString('de-DE', {
-							day: '2-digit',
-							month: '2-digit',
-							year: 'numeric'
-						})}
+						{#if video.createdDate !== undefined}
+							{video.createdDate.toLocaleDateString('de-DE', {
+								day: '2-digit',
+								month: '2-digit',
+								year: 'numeric'
+							})}
+						{/if}
 					</li>
 				</ul>
 			</div>
